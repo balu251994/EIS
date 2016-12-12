@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ey.hcp</groupId>
+  <artifactId>EIS</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>EIS Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+     <eclipselink.version>2.6.1</eclipselink.version>
+  	 <google.gson.version>2.6.2</google.gson.version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+		<groupId>org.eclipse.persistence</groupId>
+		<artifactId>eclipselink</artifactId>
+		<version>${eclipselink.version}</version>
+	</dependency>
+		
+	<dependency>
+		<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+		<version>${google.gson.version}</version>
+	</dependency>
+    
+    <dependency>
+    	<groupId>org.apache.commons</groupId>
+    	<artifactId>commons-csv</artifactId>
+    	<version>1.1</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.xerial</groupId>
+	    <artifactId>sqlite-jdbc</artifactId>
+	    <version>3.8.11.2</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.glassfish.jersey.core</groupId>
+		<artifactId>jersey-server</artifactId>
+		<version>2.23.2</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.glassfish.jersey.containers</groupId>
+		<artifactId>jersey-container-servlet</artifactId>
+		<version>2.23.2</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.glassfish.jersey.media</groupId>
+		<artifactId>jersey-media-multipart</artifactId>
+		<version>2.23.2</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.glassfish.jersey.media</groupId>
+		<artifactId>jersey-media-json-jackson</artifactId>
+		<version>2.23.2</version>
+	</dependency>    
+    
+  </dependencies>
+  
+  
+  
+  <build>
+    <finalName>EIS</finalName>
+  </build>
+  
+</project>

@@ -1,0 +1,32 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app id="WebApp_1481545331506">
+  <display-name>Archetype Created Web Application</display-name>
+  
+  	<servlet id="Servlet_1481546013239">
+		<servlet-name>JerseyServlet</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.ey.hcp.main.WSConfig</param-value>
+		</init-param>
+  		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping id="ServletMapping_1481546013192">
+		<servlet-name>JerseyServlet</servlet-name>
+		<url-pattern>/ws/*</url-pattern>
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+	<resource-ref id="ResourceRef_1481546012020">
+	  	<res-ref-name>EcmService</res-ref-name>
+	  	<res-type>com.sap.ecm.api.EcmService</res-type>
+	  	<res-auth>Application</res-auth>
+  	</resource-ref>
+</web-app>

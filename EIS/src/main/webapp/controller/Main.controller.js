@@ -21,11 +21,16 @@ sap.ui.define([
 		btnSubmitPressed: function() {
 			console.log("btnSubmit Pressed");
 			
+			var docName = this.getView().byId("inpDocName").getValue();
+			var docUploadedBy = this.getView().byId("inpDocUploadedBy").getValue();
+			
+			console.log("docName: " + docName + " | docUploadedBy: " + docUploadedBy);
+			
 			$.ajax({
-				url: "ws/service/date",
+				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
 				method: "get",
 				success: function(data, status, xhr) {
-					console.log("data: " + data.date);
+					console.log("data: " + data + ", status: " + status);
 				},
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);

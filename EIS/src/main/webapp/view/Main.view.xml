@@ -11,7 +11,14 @@
 		<pages>
 			<Page>
 				<content>
-					<Button text="Submit" icon="sap-icon://accept" press="btnSubmitPressed" />
+					<f:SimpleForm>
+						<Label text="Document Name: "/>
+						<Input id="inpDocName" />
+						<Label text="Document Uploaded By: "/>
+						<Input id="inpDocUploadedBy"/>
+						<Label text="" />
+						<Button text="Submit" icon="sap-icon://accept" press="btnSubmitPressed" />
+					</f:SimpleForm>
 				</content>
 			</Page>
 		</pages>

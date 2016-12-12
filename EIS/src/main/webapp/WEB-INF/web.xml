@@ -29,4 +29,10 @@
 	  	<res-type>com.sap.ecm.api.EcmService</res-type>
 	  	<res-auth>Application</res-auth>
   	</resource-ref>
+  	
+  	<resource-ref>
+  		<res-ref-name>jdbc/DefaultDB</res-ref-name>
+  		<res-type>javax.sql.DataSource</res-type>
+  		<res-auth>Application</res-auth>
+  	</resource-ref>
 </web-app>

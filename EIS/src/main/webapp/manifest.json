@@ -1,0 +1,63 @@
+{
+	"_version" : "1.3.0",
+	"sap.app" : {
+		"_version" : "1.3.0",
+		"id" : "com.ey.hcp.eis",
+		"type" : "application",
+		"i18n" : "i18n/i18n.properties",
+		"title" : "{{appTitle}}",
+		"description" : "{{appDescription}}",
+		"applicationVersion" : {
+			"version" : "1.0.0"
+		}
+	},
+	"sap.ui" : {
+		"_version" : "1.3.0",
+		"technology" : "UI5",
+		"deviceTypes" : {
+			"desktop" : true,
+			"tablet" : true,
+			"phone" : true
+		},
+		"supportedThemes" : ["sap_bluecrystal", "sap_hcb"],
+		"icons" : {
+			"icon" : "sap-icon://e-care"
+		}
+	},
+	"sap.ui5" : {
+		"_version" : "1.2.0",
+		"rootView" : {
+			"viewName" : "com.ey.hcp.eis.view.Main",
+			"type" : "XML",
+			"id" : "main"
+		},
+		"handleValidation" : true,
+		"autoPrefixId" : false,
+		"dependencies" : {
+			"minUi5Version" : "1.34",
+			"libs" : {
+				"sap.ui.core" : {
+					"minVersion" : "1.34.0"
+				},
+				"sap.m" : {
+					"minVersion" : "1.34.0"
+				},
+				"sap.ui.layout" : {
+					"minVersion" : "1.34.0"
+				}
+			}
+		},
+		"contentDensities" : {
+			"compact" : true,
+			"cozy" : true
+		},
+		"models" : {
+			"i18n":  {
+				"type" : "sap.ui.model.resource.ResourceModel",
+				"settings" : {
+					"bundleName" : "com.ey.hcp.eis.i18n.i18n"
+				}
+			}
+		}
+	}
+}

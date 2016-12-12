@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>CAM 361 Document Manager</title>
+		
+		<script
+			id="sap-ui-bootstrap"
+			src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+			data-sap-ui-theme="sap_bluecrystal"
+			data-sap-ui-libs="sap.m"
+			data-sap-ui-xx-bindingSyntax="complex"
+			data-sap-ui-preload=""
+			data-sap-ui-resourceroots='{"com.ey.hcp.eis":"./"}'>
+		</script>
+		
+		<script>
+			sap.ui.getCore().attachInit(function(){
+                new sap.m.Shell({
+                    app: new sap.ui.core.ComponentContainer({
+                        name: "com.ey.hcp.eis"
+                    })
+                }).placeAt("content");
+			});
+		</script>
+	</head>
+	<body class="sapUiBody">
+		<div id="content"></div>
+	</body>
+</html>

@@ -21,6 +21,17 @@ public class Document {
 	
 	@Basic
 	private Date docUploadedDate;
+	
+	@Basic
+	private String docId;
+
+	public String getDocId() {
+		return docId;
+	}
+
+	public void setDocId(String docId) {
+		this.docId = docId;
+	}
 
 	public String getId() {
 		return id;

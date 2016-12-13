@@ -35,8 +35,10 @@ public class RepoAccess {
 @Inject
 DocumentDAO documentDAO;
 
-	public RepoAccess(HttpServletRequest req) {
-				
+	public com.ey.hcp.jpa.Document repoAcc(HttpServletRequest req) {
+		
+		
+		com.ey.hcp.jpa.Document doc=null;
 		String docName = null;
 		String docMime = null;
 		InputStream docIs = null;
@@ -68,7 +70,7 @@ DocumentDAO documentDAO;
 			e.printStackTrace();
 		}
 		
-		String uniqueName = "com.ey.hcp.Repo";
+		String uniqueName = "com.ey.hcp.Repo1";
 		String secretKey = "!Asdfg123$";
 		
 		Session openCMISSession;
@@ -100,7 +102,7 @@ DocumentDAO documentDAO;
 			Folder folder = null;
 			
 			try {
-				folder.createFolder(folderProp);
+				folder = root.createFolder(folderProp);
 			} catch (CmisNameConstraintViolationException e) {
 				
 				Iterator<CmisObject> itFol = root.getChildren().iterator();
@@ -124,19 +126,16 @@ DocumentDAO documentDAO;
 			
 			Document docIm =null;
 			
-			ContentStream cstream = openCMISSession.getObjectFactory().createContentStream(docName, docSize, 
-
-docMime, docIs);
+			ContentStream cstream = openCMISSession.getObjectFactory().createContentStream(docName, docSize, docMime, docIs);
 			
 			try {
-				com.ey.hcp.jpa.Document doc = new com.ey.hcp.jpa.Document();
+				doc = new com.ey.hcp.jpa.Document();
 				
 				docIm = folder.createDocument(properties, cstream, VersioningState.NONE);
 				System.out.println("Document Id:" + docIm.getId());
 				doc.setDocId(docIm.getId());
 				documentDAO.createDocument(doc);
 				System.out.println("Document Uploaded Successfully");
-				
 				
 			} catch (CmisNameConstraintViolationException e) {
 				System.out.println("Document alread exists");
@@ -148,11 +147,37 @@ docMime, docIs);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+		return doc;
 	}
-	
-	
-	
+
+	public Document download(String id) {
+		String uniqueName = "com.ey.hcp.Repo1";
+		String secretKey = "!Asdfg123$";
+		
+		Session openCMISSession;
+		Document obj = null;
+		
+		try {
+			InitialContext ctx = new InitialContext();
+			String lookupName = "java:comp/env/EcmService";
+			EcmService ecmSvc = (EcmService) ctx.lookup(lookupName);
+			try {
+				openCMISSession = ecmSvc.connect(uniqueName, lookupName);				
+			} catch (CmisObjectNotFoundException e) {
+				
+				RepositoryOptions options = new RepositoryOptions();
+				options.setUniqueName(uniqueName);
+				options.setRepositoryKey(secretKey);
+				options.setVisibility(Visibility.PROTECTED);
+				ecmSvc.createRepository(options);
+				openCMISSession = ecmSvc.connect(uniqueName, secretKey);				
+			}
+			
+			obj = (Document)openCMISSession.getObject(id);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return obj;
+	}	
 }

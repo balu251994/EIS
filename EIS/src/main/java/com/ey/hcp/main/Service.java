@@ -1,5 +1,8 @@
 package com.ey.hcp.main;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,16 +10,17 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 import com.ey.hcp.RepoAccess.RepoAccess;
 import com.ey.hcp.dao.DocumentDAO;
@@ -30,6 +34,9 @@ public class Service {
 	
 	@Inject
 	DocumentDAO documentDAO;
+	
+	@Inject
+	RepoAccess repo;
 	
 	@Inject
 	Test test;
@@ -56,9 +63,9 @@ public class Service {
 	@POST
 	@Path("document/upload/{name}/{uploadedBy}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadDocument(@PathParam("name") String name, @PathParam("uploadedBy") String uploadedBy, @Context HttpServletRequest req) {
+	public Response uploadDocument(@Context HttpServletRequest req) {
 		
-		RepoAccess repo = new RepoAccess(req);
+		Document doc = repo.repoAcc(req);
 		/*Document document = new Document();
 		document.setDocName(name);
 		document.setDocUploadedBy(uploadedBy);
@@ -66,8 +73,43 @@ public class Service {
 		
 		documentDAO.createDocument(document);*/
 		
-		//return Response.ok().entity(document).build();
+		return Response.ok().entity(doc).build();
 		
-		return null;
 	}
+	
+	@GET
+	@Path("document/download/{id}")
+	 public Response downloadDocument (@PathParam("id") String id)
+	 {
+        String docName = "";
+        StreamingOutput so = null;
+        
+        try {
+              org.apache.chemistry.opencmis.client.api.Document doc = repo.download(id);
+               
+               docName = doc.getName();
+               final InputStream is = doc.getContentStream().getStream();
+               
+               so = new StreamingOutput() {
+				
+				public void write(OutputStream os) throws IOException, WebApplicationException {
+					int num;
+                    byte b[] = new byte[8 * 1024];
+                    
+                    while((num = is.read(b)) != -1) {
+                    	os.write(b, 0, num);
+                    }
+                    
+                    is.close();
+                    os.close();
+				}
+			};
+        } catch(Exception e) {
+               e.printStackTrace();
+        }
+        
+        return Response.ok(so, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition", "attachment; filename=" + docName).build();
+
+	 }
+	
 }

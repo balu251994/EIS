@@ -12,13 +12,21 @@
 			<Page>
 				<content>
 					<f:SimpleForm>
-						<Label text="Document Name: "/>
-						<Input id="inpDocName" />
-						<Label text="Document Uploaded By: "/>
-						<Input id="inpDocUploadedBy"/>
-						<Label text="" />
+						<u:FileUploader
+							id="fileUploader"
+							name="myFileUpload"
+							uploadUrl="ws/service/document/upload/123/abc123"
+							tooltip="Upload your file to the local server"
+							style="Emphasized"
+							fileType="jpg"
+							placeholder="Choose a file for Upload...">
+						</u:FileUploader>
 						<Button text="Submit" icon="sap-icon://accept" press="btnSubmitPressed" />
-						<Button text="Reset" icon="sap-icon://decline" press="btnResetPressed" />
+						<Label text="Enter Doc Id" />
+                        <Input id="documentId" />
+                        <Label text="" />
+                        <Button text="Download" icon="sap-icon://download"  press="btnDownloadPressed" />
+                        <Button text="Delete" icon="sap-icon://decline" press="btnDeletePressed" />
 					</f:SimpleForm>
 				</content>
 			</Page>

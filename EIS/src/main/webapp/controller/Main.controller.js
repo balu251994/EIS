@@ -21,12 +21,14 @@ sap.ui.define([
 		btnSubmitPressed: function() {
 			console.log("btnSubmit Pressed");
 			
-			var docName = this.getView().byId("inpDocName").getValue();
-			var docUploadedBy = this.getView().byId("inpDocUploadedBy").getValue();
+			var oFileUploader = this.getView().byId("fileUploader");
+			if(!oFileUploader.getValue()) {
+				MessageToast.show("Choose a file first");
+				return;
+			}
+			oFileUploader.upload();
 			
-			console.log("docName: " + docName + " | docUploadedBy: " + docUploadedBy);
-			
-			$.ajax({
+			/*$.ajax({
 				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
 				method: "get",
 				success: function(data, status, xhr) {
@@ -35,28 +37,40 @@ sap.ui.define([
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);
 				}
-			});
+			});*/
 		},
 		
-		btnResetPressed: function() {
-			var obj = {
-				a: "value 1",
-				b: false
-			};
-			
-			$.ajax({
-				url: "ws/service/hello",
+		btnDownloadPressed: function() {
+			console.log("btnDownload Pressed");
+			var documentName = this.getView().byId("documentId").getValue();
+			/*$.ajax({
+				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
 				method: "get",
-				data: JSON.stringify(obj),
-				contentType: "application/json",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
 				},
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);
 				}
-			});			
-		}
+			});*/
+		},
+		
+		btnDeletePressed: function() {
+			console.log("btnDelete Pressed");
+			var documentName = this.getView().byId("documentId").getValue();
+			/*$.ajax({
+				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
+				method: "get",
+				success: function(data, status, xhr) {
+					console.log("data: " + data + ", status: " + status);
+				},
+				error: function(xhr, status, error) {
+					console.log("Error in XHR: " + status + " | " + error);
+				}
+			});*/
+		},
+		
+
 	
 	});
 });

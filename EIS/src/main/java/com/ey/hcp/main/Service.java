@@ -55,6 +55,7 @@ public class Service {
 	
 	@POST
 	@Path("document/upload/{name}/{uploadedBy}")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadDocument(@PathParam("name") String name, @PathParam("uploadedBy") String uploadedBy, @Context HttpServletRequest req) {
 		
 		RepoAccess repo = new RepoAccess(req);

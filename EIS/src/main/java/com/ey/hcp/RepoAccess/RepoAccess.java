@@ -69,7 +69,7 @@ DocumentDAO documentDAO;
 		}
 		
 		String uniqueName = "com.ey.hcp.Repo";
-		String secretKey = "Asdfg123$";
+		String secretKey = "!Asdfg123$";
 		
 		Session openCMISSession;
 		

@@ -6,7 +6,7 @@
 		<class>com.ey.hcp.jpa.Document</class>
 		
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Users\balkrishna.meena\MySQLiteDB\EIS"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Users\saurabh.agarwal\MySQLiteDB\EIS"/>
 			<property name="javax.persistence.jdbc.user" value=""/>
 			<property name="javax.persistence.jdbc.password" value=""/>
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>

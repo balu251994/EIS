@@ -32,6 +32,14 @@ public class EMFFactory extends AbstractBinder implements Factory<EntityManager>
 	}
 	
     private EntityManagerFactory createEMF() {
-        return Persistence.createEntityManagerFactory(persistenceUnitName);
+    	EntityManagerFactory emf = null;
+    	
+    	try {
+            emf = Persistence.createEntityManagerFactory(persistenceUnitName);    		
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return emf;
     }
 }

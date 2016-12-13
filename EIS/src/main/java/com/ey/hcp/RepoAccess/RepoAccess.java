@@ -11,9 +11,11 @@ import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.chemistry.opencmis.client.SessionFactoryFinder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
@@ -26,6 +28,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.chemistry.opencmis.client.api.Document;
 
 import com.ey.hcp.dao.DocumentDAO;
+import com.sap.ecm.api.EcmFactory;
 import com.sap.ecm.api.EcmService;
 import com.sap.ecm.api.RepositoryOptions;
 import com.sap.ecm.api.RepositoryOptions.Visibility;
@@ -38,35 +41,42 @@ DocumentDAO documentDAO;
 	private Session openCMISSession = null;
 
 	private void sessionLogin(){
-		
-		if(openCMISSession != null) {
+	
+		if(openCMISSession !=null){
 			return;
 		}
 		
-		String uniqueName = "com.ey.hcp.Repo1";
+		
+		String uniqueName = "com.ey.hcp.ABC";
 		String secretKey = "!Asdfg123$";
 		
 		try {
 			InitialContext ctx = new InitialContext();
 			String lookupName = "java:comp/env/EcmService";
 			EcmService ecmSvc = (EcmService) ctx.lookup(lookupName);
+			
 			try {
-				openCMISSession = ecmSvc.connect(uniqueName, lookupName);				
-			} catch (CmisObjectNotFoundException e) {
+				openCMISSession = ecmSvc.connect(uniqueName, secretKey);
+				} catch (CmisObjectNotFoundException e) {
 				
 				RepositoryOptions options = new RepositoryOptions();
 				options.setUniqueName(uniqueName);
 				options.setRepositoryKey(secretKey);
 				options.setVisibility(Visibility.PROTECTED);
 				ecmSvc.createRepository(options);
-				openCMISSession = ecmSvc.connect(uniqueName, secretKey);				
+				openCMISSession = ecmSvc.connect(uniqueName, secretKey);
+				openCMISSession.getDefaultContext().setCacheEnabled(false);
 			}
 		} catch(Exception e){
 			e.printStackTrace();
 		}
+		
 	}
+	
+	
 
 	public com.ey.hcp.jpa.Document repoAcc(HttpServletRequest req) {
+		
 		sessionLogin();
 		
 		com.ey.hcp.jpa.Document doc=null;
@@ -147,6 +157,7 @@ DocumentDAO documentDAO;
 				docIm = folder.createDocument(properties, cstream, VersioningState.NONE);
 				System.out.println("Document Id:" + docIm.getId());
 				doc.setDocId(docIm.getId());
+				doc.setDocName(docIm.getName());
 				documentDAO.createDocument(doc);
 				System.out.println("Document Uploaded Successfully");
 				

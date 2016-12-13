@@ -41,9 +41,10 @@ sap.ui.define([
 		},
 		
 		btnDownloadPressed: function() {
-			console.log("btnDownload Pressed");
-			var documentName = this.getView().byId("documentId").getValue();
-			$.ajax({
+			sap.m.MessageToast.show("btnDownload Pressed");
+			var docId = this.getView().byId("documentId").getValue();
+			window.open("ws/service/document/download/" + docId, "_parent");
+			/*$.ajax({
 				url: "ws/service/document/download/" + documentName ,
 				method: "get",
 				success: function(data, status, xhr) {
@@ -52,7 +53,7 @@ sap.ui.define([
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);
 				}
-			});
+			});*/
 		},
 		
 		btnDeletePressed: function() {

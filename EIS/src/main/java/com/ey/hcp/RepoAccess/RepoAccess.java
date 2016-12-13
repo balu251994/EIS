@@ -35,8 +35,39 @@ public class RepoAccess {
 @Inject
 DocumentDAO documentDAO;
 
-	public com.ey.hcp.jpa.Document repoAcc(HttpServletRequest req) {
+	private Session openCMISSession = null;
+
+	private void sessionLogin(){
 		
+		if(openCMISSession != null) {
+			return;
+		}
+		
+		String uniqueName = "com.ey.hcp.Repo1";
+		String secretKey = "!Asdfg123$";
+		
+		try {
+			InitialContext ctx = new InitialContext();
+			String lookupName = "java:comp/env/EcmService";
+			EcmService ecmSvc = (EcmService) ctx.lookup(lookupName);
+			try {
+				openCMISSession = ecmSvc.connect(uniqueName, lookupName);				
+			} catch (CmisObjectNotFoundException e) {
+				
+				RepositoryOptions options = new RepositoryOptions();
+				options.setUniqueName(uniqueName);
+				options.setRepositoryKey(secretKey);
+				options.setVisibility(Visibility.PROTECTED);
+				ecmSvc.createRepository(options);
+				openCMISSession = ecmSvc.connect(uniqueName, secretKey);				
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public com.ey.hcp.jpa.Document repoAcc(HttpServletRequest req) {
+		sessionLogin();
 		
 		com.ey.hcp.jpa.Document doc=null;
 		String docName = null;
@@ -45,6 +76,7 @@ DocumentDAO documentDAO;
 		long docSize = 0;
 		DiskFileItemFactory dif = new DiskFileItemFactory();
 		ServletFileUpload sfu = new ServletFileUpload(dif);
+		
 		try {
 			List<FileItem> items = sfu.parseRequest(req);
 			Iterator<FileItem> it = items.iterator();
@@ -70,26 +102,7 @@ DocumentDAO documentDAO;
 			e.printStackTrace();
 		}
 		
-		String uniqueName = "com.ey.hcp.Repo1";
-		String secretKey = "!Asdfg123$";
 		
-		Session openCMISSession;
-		
-		try {
-			InitialContext ctx = new InitialContext();
-			String lookupName = "java:comp/env/EcmService";
-			EcmService ecmSvc = (EcmService) ctx.lookup(lookupName);
-			try {
-				openCMISSession = ecmSvc.connect(uniqueName, lookupName);				
-			} catch (CmisObjectNotFoundException e) {
-				
-				RepositoryOptions options = new RepositoryOptions();
-				options.setUniqueName(uniqueName);
-				options.setRepositoryKey(secretKey);
-				options.setVisibility(Visibility.PROTECTED);
-				ecmSvc.createRepository(options);
-				openCMISSession = ecmSvc.connect(uniqueName, secretKey);				
-			}
 			
 			Folder root = openCMISSession.getRootFolder();
 			
@@ -140,44 +153,17 @@ DocumentDAO documentDAO;
 			} catch (CmisNameConstraintViolationException e) {
 				System.out.println("Document alread exists");
 			}
-			
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		return doc;
 	}
 
 	public Document download(String id) {
-		String uniqueName = "com.ey.hcp.Repo1";
-		String secretKey = "!Asdfg123$";
-		
-		Session openCMISSession;
+		sessionLogin();
 		Document obj = null;
+		obj = (Document) openCMISSession.getObject(id);
 		
-		try {
-			InitialContext ctx = new InitialContext();
-			String lookupName = "java:comp/env/EcmService";
-			EcmService ecmSvc = (EcmService) ctx.lookup(lookupName);
-			try {
-				openCMISSession = ecmSvc.connect(uniqueName, lookupName);				
-			} catch (CmisObjectNotFoundException e) {
-				
-				RepositoryOptions options = new RepositoryOptions();
-				options.setUniqueName(uniqueName);
-				options.setRepositoryKey(secretKey);
-				options.setVisibility(Visibility.PROTECTED);
-				ecmSvc.createRepository(options);
-				openCMISSession = ecmSvc.connect(uniqueName, secretKey);				
-			}
-			
-			obj = (Document)openCMISSession.getObject(id);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
+		//System.out.println(obj.toString());
 		return obj;
+		
 	}	
 }

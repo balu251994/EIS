@@ -36,6 +36,26 @@ sap.ui.define([
 					console.log("Error in XHR: " + status + " | " + error);
 				}
 			});
+		},
+		
+		btnResetPressed: function() {
+			var obj = {
+				a: "value 1",
+				b: false
+			};
+			
+			$.ajax({
+				url: "ws/service/hello",
+				method: "get",
+				data: JSON.stringify(obj),
+				contentType: "application/json",
+				success: function(data, status, xhr) {
+					console.log("data: " + data + ", status: " + status);
+				},
+				error: function(xhr, status, error) {
+					console.log("Error in XHR: " + status + " | " + error);
+				}
+			});			
 		}
 	
 	});

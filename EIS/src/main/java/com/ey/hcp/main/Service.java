@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.ey.hcp.dao.DocumentDAO;
+import com.ey.hcp.dto.Test;
 import com.ey.hcp.jpa.Document;
 
 @Path("service")
@@ -25,9 +26,15 @@ public class Service {
 	@Inject
 	DocumentDAO documentDAO;
 	
+	@Inject
+	Test test;
+	
 	@GET
 	@Path("hello")
-	public String getHello() {
+	public String getHello(Test test) {
+		System.out.println("test a: " + test.getA());
+		System.out.println("test b: " + test.isB());
+		
 		return "Hello World";
 	}
 	

@@ -18,6 +18,7 @@
 						<Input id="inpDocUploadedBy"/>
 						<Label text="" />
 						<Button text="Submit" icon="sap-icon://accept" press="btnSubmitPressed" />
+						<Button text="Reset" icon="sap-icon://decline" press="btnResetPressed" />
 					</f:SimpleForm>
 				</content>
 			</Page>

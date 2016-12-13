@@ -43,8 +43,8 @@ sap.ui.define([
 		btnDownloadPressed: function() {
 			console.log("btnDownload Pressed");
 			var documentName = this.getView().byId("documentId").getValue();
-			/*$.ajax({
-				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
+			$.ajax({
+				url: "ws/service/document/download/" + documentName ,
 				method: "get",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
@@ -52,22 +52,22 @@ sap.ui.define([
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);
 				}
-			});*/
+			});
 		},
 		
 		btnDeletePressed: function() {
 			console.log("btnDelete Pressed");
 			var documentName = this.getView().byId("documentId").getValue();
-			/*$.ajax({
-				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
-				method: "get",
+			$.ajax({
+				url: "ws/service/document/delete/" + documentName ,
+				method: "delete",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
 				},
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);
 				}
-			});*/
+			});
 		},
 		
 

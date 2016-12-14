@@ -24,11 +24,11 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 	
-	<resource-ref id="ResourceRef_1481546012020">
-	  	<res-ref-name>EcmService</res-ref-name>
-	  	<res-type>com.sap.ecm.api.EcmService</res-type>
-	  	<res-auth>Application</res-auth>
-  	</resource-ref>
+	<resource-ref>
+	<res-ref-name>EcmService</res-ref-name>
+	<res-type>com.sap.ecm.api.EcmService</res-type>
+	<res-auth>Application</res-auth>
+	</resource-ref>
   	
   	<resource-ref>
   		<res-ref-name>jdbc/DefaultDB</res-ref-name>

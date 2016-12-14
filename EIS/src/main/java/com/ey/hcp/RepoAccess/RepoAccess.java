@@ -1,6 +1,7 @@
 package com.ey.hcp.RepoAccess;
 
 import java.io.IOException;
+
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,11 +12,9 @@ import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.chemistry.opencmis.client.SessionFactoryFinder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
@@ -28,7 +27,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.chemistry.opencmis.client.api.Document;
 
 import com.ey.hcp.dao.DocumentDAO;
-import com.sap.ecm.api.EcmFactory;
 import com.sap.ecm.api.EcmService;
 import com.sap.ecm.api.RepositoryOptions;
 import com.sap.ecm.api.RepositoryOptions.Visibility;

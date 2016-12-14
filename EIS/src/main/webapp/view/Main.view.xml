@@ -15,7 +15,7 @@
 						<u:FileUploader
 							id="fileUploader"
 							name="myFileUpload"
-							uploadUrl="ws/service/document/upload/123/abc123"
+							uploadUrl="ws/service/document/upload/ztDH3fwiiaAPVtIHLl3Sv8zFik5FjMVJtn6ZZu8UDyQ"
 							tooltip="Upload your file to the local server"
 							style="Emphasized"
 							fileType="jpg"

@@ -2,6 +2,7 @@ package com.ey.hcp.RepoAccess;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ DocumentDAO documentDAO;
 	
 	
 
-	public com.ey.hcp.jpa.Document repoAcc(HttpServletRequest req) {
+	public com.ey.hcp.jpa.Document repoAcc(HttpServletRequest req, String parentId) {
 		
 		sessionLogin();
 		
@@ -114,8 +115,7 @@ DocumentDAO documentDAO;
 		
 		
 			
-			Folder root = openCMISSession.getRootFolder();
-			
+/*			Folder root = openCMISSession.getRootFolder();	
 			//Folder Create
 			
 			Map<String, String> folderProp = new HashMap<String, String>();
@@ -128,6 +128,7 @@ DocumentDAO documentDAO;
 				folder = root.createFolder(folderProp);
 			} catch (CmisNameConstraintViolationException e) {
 				
+				
 				Iterator<CmisObject> itFol = root.getChildren().iterator();
 				
 				while (itFol.hasNext()) {
@@ -139,7 +140,9 @@ DocumentDAO documentDAO;
 					
 				}
 				
-			}
+			}*/
+			
+			Folder folder = (Folder) openCMISSession.getObject(parentId);
 			
 			//Document Create
 			
@@ -158,6 +161,8 @@ DocumentDAO documentDAO;
 				System.out.println("Document Id:" + docIm.getId());
 				doc.setDocId(docIm.getId());
 				doc.setDocName(docIm.getName());
+				doc.setDocType("document");
+				doc.setParentId(parentId);
 				documentDAO.createDocument(doc);
 				System.out.println("Document Uploaded Successfully");
 				
@@ -220,7 +225,7 @@ DocumentDAO documentDAO;
 
 
 
-	public ArrayList<Map<String, String>> getData(String id) {
+	public Map<String, ArrayList> getData(String id) {
 		sessionLogin();
 		
 		CmisObject objCmis =  openCMISSession.getObject(id);
@@ -253,6 +258,38 @@ DocumentDAO documentDAO;
 			childrenArrayList.add(object);
 		}
 		
-		return childrenArrayList;
+		Map<String,ArrayList> obj = new HashMap<String, ArrayList>();
+		obj.put("data", childrenArrayList);
+		return obj;
+	}
+
+
+
+	public String createFolder(String folName, String folId) {
+		sessionLogin();
+		
+		if(folId.equals("6dda0564d9a887d1aced0585"))
+		{
+			Folder root = openCMISSession.getRootFolder();
+			
+			Map<String, String> newfolder = new HashMap<String, String>();
+			newfolder.put(PropertyIds.OBJECT_TYPE_ID, "cmis:folder");
+			newfolder.put(PropertyIds.NAME, folName);
+			
+			Folder newfol = root.createFolder(newfolder);
+			return newfol.getId();
+		}
+		else {
+			
+			Folder fol = (Folder) openCMISSession.getObject(folId);
+			
+			Map<String, String> newfolder = new HashMap<String, String>();
+			newfolder.put(PropertyIds.OBJECT_TYPE_ID, "cmis:folder");
+			newfolder.put(PropertyIds.NAME, folName);
+			
+			Folder newfol = fol.createFolder(newfolder);
+			return newfol.getId();
+			
+		}
 	}
 }

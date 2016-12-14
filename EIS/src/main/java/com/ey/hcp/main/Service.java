@@ -3,6 +3,7 @@ package com.ey.hcp.main;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,11 +63,11 @@ public class Service {
 	}
 	
 	@POST
-	@Path("document/upload/{name}/{uploadedBy}")
+	@Path("document/upload/{parentId}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadDocument(@Context HttpServletRequest req) {
+	public Response uploadDocument(@PathParam("parentId") String parentId,@Context HttpServletRequest req) {
 		
-		Document doc = repo.repoAcc(req);
+		Document doc = repo.repoAcc(req, parentId);
 		/*Document document = new Document();
 		document.setDocName(name);
 		document.setDocUploadedBy(uploadedBy);
@@ -116,20 +117,32 @@ public class Service {
 	@GET
 	@Path("getData")
 	public ArrayList<Map<String, String>> getData(){
-	
-		
-	 return repo.getData();
+	return repo.getData();
 		
 		
 	}
 	
 	@GET
 	@Path("getData/{id}")
-	public ArrayList<Map<String, String>> getData(@PathParam("id") String id){
+	public Map<String, ArrayList> getData(@PathParam("id") String id){	
+	return repo.getData(id);
+			
+	}
 	
+	//CREATE FOLDER SERVICE
+	
+	@GET
+	@Path("folderCreate/{folName}/{parentId}")
+	public Response createFolder(@PathParam("folName") String folName, @PathParam("parentId") String parentId){
 		
-	 return repo.getData(id);
-		
+		String folId =repo.createFolder(folName, parentId);
+		Document doc = new Document();
+		doc.setDocId(folId);
+		doc.setDocName(folName);
+		doc.setDocType("folder");
+		doc.setParentId(parentId);
+		documentDAO.createDocument(doc);
+		return Response.ok().entity(doc).build();
 		
 	}
 	

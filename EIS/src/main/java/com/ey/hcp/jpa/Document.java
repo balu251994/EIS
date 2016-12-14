@@ -24,6 +24,29 @@ public class Document {
 	
 	@Basic
 	private String docId;
+	
+	@Basic 
+	private String docType;
+	
+	@Basic
+	private String parentId;
+	
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getDocType() {
+		return docType;
+	}
+
+	public void setDocType(String docType) {
+		this.docType = docType;
+	}
 
 	public String getDocId() {
 		return docId;

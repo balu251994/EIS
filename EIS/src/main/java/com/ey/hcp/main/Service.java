@@ -1,10 +1,10 @@
 package com.ey.hcp.main;
 
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -112,5 +112,25 @@ public class Service {
         return Response.ok(so, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition", "attachment; filename=" + docName).build();
 
 	 }
+	
+	@GET
+	@Path("getData")
+	public ArrayList<Map<String, String>> getData(){
+	
+		
+	 return repo.getData();
+		
+		
+	}
+	
+	@GET
+	@Path("getData/{id}")
+	public ArrayList<Map<String, String>> getData(@PathParam("id") String id){
+	
+		
+	 return repo.getData(id);
+		
+		
+	}
 	
 }

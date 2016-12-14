@@ -1,8 +1,9 @@
 package com.ey.hcp.RepoAccess;
 
 import java.io.IOException;
-
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -174,5 +176,83 @@ DocumentDAO documentDAO;
 		//System.out.println(obj.toString());
 		return obj;
 		
-	}	
+	}
+
+
+
+	public ArrayList<Map<String, String>> getData() {
+		sessionLogin();
+		
+		Folder root = openCMISSession.getRootFolder();
+		
+		ItemIterable<CmisObject> folder = root.getChildren();
+		
+		Iterator<CmisObject> it = folder.iterator();
+		
+		ArrayList<Map<String, String>> childrenArrayList = new ArrayList<Map<String,String>>();
+		
+		Map<String, String> object;
+		ArrayList<Map<String, String>> objectArray = new ArrayList<Map<String,String>>();
+		
+		while (it.hasNext()) {
+			CmisObject obj = it.next();
+			
+			object = new HashMap<String, String>();
+			
+			if(obj instanceof Folder)
+			{	
+				object.put("type", "folder");
+			} else
+			{
+				object.put("type","document");
+				
+			}
+			
+			object.put("id", obj.getId());
+			object.put("name", obj.getName());
+			
+			objectArray.add(object);
+			childrenArrayList.add(object);
+		}
+		
+		return childrenArrayList;
+	}
+
+
+
+	public ArrayList<Map<String, String>> getData(String id) {
+		sessionLogin();
+		
+		CmisObject objCmis =  openCMISSession.getObject(id);
+		
+		Iterator<CmisObject> it = ((Folder)objCmis).getChildren().iterator();
+	
+		ArrayList<Map<String, String>> childrenArrayList = new ArrayList<Map<String,String>>();
+		
+		Map<String, String> object;
+		ArrayList<Map<String, String>> objectArray = new ArrayList<Map<String,String>>();
+		
+		while (it.hasNext()) {
+			CmisObject obj = it.next();
+			
+			object = new HashMap<String, String>();
+			
+			if(obj instanceof Folder)
+			{	
+				object.put("type", "folder");
+			} else
+			{
+				object.put("type","document");
+				
+			}
+			
+			object.put("id", obj.getId());
+			object.put("name", obj.getName());
+			
+			objectArray.add(object);
+			childrenArrayList.add(object);
+		}
+		
+		return childrenArrayList;
+	}
 }

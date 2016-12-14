@@ -10,11 +10,19 @@
   <url>http://maven.apache.org</url>
   
   <properties>
-     <eclipselink.version>2.6.1</eclipselink.version>
+     <eclipselink.version>2.6.2</eclipselink.version>
   	 <google.gson.version>2.6.2</google.gson.version>
   </properties>
   
   <dependencies>
+  
+  <dependency>
+		<groupId>com.sap.cloud</groupId>
+		<artifactId>neo-java-web-api</artifactId>
+		<version>2.15.7.3</version>
+		<scope>provided</scope>
+	</dependency> 
+  
 	<dependency>
 	    <groupId>commons-io</groupId>
 	    <artifactId>commons-io</artifactId>

@@ -116,7 +116,7 @@ public class Service {
 	
 	@GET
 	@Path("getData")
-	public ArrayList<Map<String, String>> getData(){
+	public Map<String, ArrayList> getData(){
 	return repo.getData();
 		
 		

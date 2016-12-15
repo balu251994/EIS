@@ -185,7 +185,7 @@ DocumentDAO documentDAO;
 
 
 
-	public ArrayList<Map<String, String>> getData() {
+	public Map<String, ArrayList> getData() {
 		sessionLogin();
 		
 		Folder root = openCMISSession.getRootFolder();
@@ -220,7 +220,9 @@ DocumentDAO documentDAO;
 			childrenArrayList.add(object);
 		}
 		
-		return childrenArrayList;
+		Map<String, ArrayList> retObj = new HashMap<String, ArrayList>();
+		retObj.put("data", childrenArrayList);
+		return retObj;
 	}
 
 

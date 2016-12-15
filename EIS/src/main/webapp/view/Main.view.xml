@@ -44,7 +44,8 @@
 									justifyContent="Center">
 									<m:items>
 										<m:Button id="buttonGet" text="Get"  press="btnGetPressed" class="sapUiSmallMarginEnd" />
-										<m:Button id="buttondown" text="download" type="Accept" press="btnDownloadPressed" class="sapUiSmallMarginEnd"/>
+										<m:Button id="buttonDown" text="Download" type="Accept" press="btnDownloadPressed" class="sapUiSmallMarginEnd"/>
+										<m:Button id="buttonMove" text="Move" press="btnMovePressed" class="sapUiSmallMarginEnd"/>
 										<m:Button id="buttonUp" text="Upload" icon="sap-icon://accept" press="btnSubmitPressed" />
 									</m:items>
 								</m:FlexBox>

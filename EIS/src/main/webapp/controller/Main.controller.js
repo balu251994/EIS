@@ -126,14 +126,29 @@ sap.ui.define([
 			for(var i=0;i<value.length;i++){
 				if(value[i].type === "folder"){
 					this.getView().byId("buttonGet").getVisible(true);
-					
+					return value[i].name ;
 				}else{
 					this.getView().byId("buttonGet").getVisible(false);
+					return value[i].name ;
 				}
-				return value[i].name ;
+				
 			}
 			
 		}*/
+		
+		/*btnMovePressed : function(e) {
+			var src = e.getSource();
+            var params = e.getParameters();
+            debugger;
+            var oContext = src.getBindingContext();
+            var sPath = oContext.getPath();
+            
+            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+            
+            var docId = tableModel.getProperty(sPath + "/id");
+            console.log();
+            
+		},*/
 	
 	});
 });

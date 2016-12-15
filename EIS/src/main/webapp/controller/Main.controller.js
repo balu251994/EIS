@@ -15,7 +15,6 @@ sap.ui.define([
 				method: "get",
 				success: function(data, status, xhr) {
 					oModel.setData(data);
-					console.log("data: " + data + ", status: " + status);
 					me.getView().setModel(oModel);
 				},
 				error: function(xhr, status, error) {
@@ -33,7 +32,18 @@ sap.ui.define([
 			
 		},
 		
-		btnSubmitPressed: function() {
+		btnSubmitPressed: function(e) {
+			
+			var src = e.getSource();
+		    
+			console.log(src);
+            var oContext = src.getBindingContext();
+            var sPath = oContext.getPath();
+            
+            console.log(oContext,sPath);
+            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+            
+            var docId = tableModel.getProperty(sPath + "/id");
 			console.log("btnSubmit Pressed");
 			
 			var oFileUploader = this.getView().byId("fileUploader");
@@ -41,6 +51,7 @@ sap.ui.define([
 				MessageToast.show("Choose a file first");
 				return;
 			}
+			oFileUploader.setUploadUrl("ws/service/document/upload/" + docId);
 			oFileUploader.upload();
 			
 			/*$.ajax({
@@ -70,6 +81,31 @@ sap.ui.define([
 			window.open("ws/service/document/download/" + docId, "_parent");
 		},
 		
+		btnGetPressed : function(e) {
+			var src = e.getSource();
+		    
+			console.log(src);
+            var oContext = src.getBindingContext();
+            var sPath = oContext.getPath();
+            
+            console.log(oContext,sPath);
+            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+            
+            var docId = tableModel.getProperty(sPath + "/id");
+            console.log(docId);
+            $.ajax({
+				url: "ws/service/getData/" + docId,
+				method: "get",
+				success: function(data, status, xhr) {
+					tableModel.setProperty(sPath+"/data", data.data);
+					console.log(tableModel.getProperty(sPath));
+				},
+				error: function(xhr, status, error) {
+					console.log("Error in XHR: " + status + " | " + error);
+				}
+			});
+		},
+		
 		btnDeletePressed: function() {
 			console.log("btnDelete Pressed");
 			var documentName = this.getView().byId("documentId").getValue();
@@ -85,7 +121,19 @@ sap.ui.define([
 			});
 		},
 		
-
+		/*formatterT: function(value){
+			//debugger;
+			for(var i=0;i<value.length;i++){
+				if(value[i].type === "folder"){
+					this.getView().byId("buttonGet").getVisible(true);
+					
+				}else{
+					this.getView().byId("buttonGet").getVisible(false);
+				}
+				return value[i].name ;
+			}
+			
+		}*/
 	
 	});
 });

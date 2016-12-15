@@ -15,18 +15,12 @@
 						<u:FileUploader
 							id="fileUploader"
 							name="myFileUpload"
-							uploadUrl="ws/service/document/upload/ztDH3fwiiaAPVtIHLl3Sv8zFik5FjMVJtn6ZZu8UDyQ"
 							tooltip="Upload your file to the local server"
 							style="Emphasized"
 							fileType="jpg"
 							placeholder="Choose a file for Upload...">
 						</u:FileUploader>
-						<m:Button text="Submit" icon="sap-icon://accept" press="btnSubmitPressed" />
-						<m:Label text="Enter Doc Id" />
-                        <m:Input id="documentId" />
-                        <m:Label text="" />
-                        <m:Button text="Download" icon="sap-icon://download"  press="btnDownloadPressed" />
-                        <m:Button text="Delete" icon="sap-icon://decline" press="btnDeletePressed" />
+
 					</f:SimpleForm>
 					
 					<TreeTable
@@ -49,8 +43,9 @@
 									alignItems="Center"
 									justifyContent="Center">
 									<m:items>
-										<m:Button text="delete" type="Reject" class="sapUiSmallMarginEnd" />
-										<m:Button text="download" type="Accept" press="btnDownloadPressed" />
+										<m:Button id="buttonGet" text="Get"  press="btnGetPressed" class="sapUiSmallMarginEnd" />
+										<m:Button id="buttondown" text="download" type="Accept" press="btnDownloadPressed" class="sapUiSmallMarginEnd"/>
+										<m:Button id="buttonUp" text="Upload" icon="sap-icon://accept" press="btnSubmitPressed" />
 									</m:items>
 								</m:FlexBox>
 								</template>

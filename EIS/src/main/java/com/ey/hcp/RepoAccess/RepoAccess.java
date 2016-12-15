@@ -294,4 +294,30 @@ DocumentDAO documentDAO;
 			
 		}
 	}
+
+
+
+	public Folder getZipper(String id) {
+	
+		sessionLogin();		
+		Folder fol = (Folder) openCMISSession.getObject(id);
+		return fol;
+	
+		
+	}
+
+
+
+	public void move(String docId,String source, String dest) {
+		
+		sessionLogin();
+		Document doc = (Document) openCMISSession.getObject(docId);
+		Folder sourceFolder = (Folder) openCMISSession.getObject(source);
+		Folder destFolder = (Folder) openCMISSession.getObject(dest);
+		
+		doc.move(sourceFolder, destFolder);
+		
+		//documentDAO.updateDocument(doc);
+				
+	}
 }

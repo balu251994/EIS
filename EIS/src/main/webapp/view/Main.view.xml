@@ -1,16 +1,16 @@
 <mvc:View
-	xmlns="sap.m"
+	xmlns="sap.ui.table"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:m="sap.m"
 	xmlns:core="sap.ui.core"
-	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:u="sap.ui.unified"
 	displayBlock="true"
 	controllerName="com.ey.hcp.eis.controller.Main">
 
-	<App>
-		<pages>
-			<Page>
-				<content>
+	<m:App>
+			<m:Page>
+				<m:content>
 					<f:SimpleForm>
 						<u:FileUploader
 							id="fileUploader"
@@ -21,16 +21,45 @@
 							fileType="jpg"
 							placeholder="Choose a file for Upload...">
 						</u:FileUploader>
-						<Button text="Submit" icon="sap-icon://accept" press="btnSubmitPressed" />
-						<Label text="Enter Doc Id" />
-                        <Input id="documentId" />
-                        <Label text="" />
-                        <Button text="Download" icon="sap-icon://download"  press="btnDownloadPressed" />
-                        <Button text="Delete" icon="sap-icon://decline" press="btnDeletePressed" />
+						<m:Button text="Submit" icon="sap-icon://accept" press="btnSubmitPressed" />
+						<m:Label text="Enter Doc Id" />
+                        <m:Input id="documentId" />
+                        <m:Label text="" />
+                        <m:Button text="Download" icon="sap-icon://download"  press="btnDownloadPressed" />
+                        <m:Button text="Delete" icon="sap-icon://decline" press="btnDeletePressed" />
 					</f:SimpleForm>
-				</content>
-			</Page>
-		</pages>
-	</App>
+					
+					<TreeTable
+		                    id="TreeTableBasic"
+		                    rows="{/}"
+		                    selectionMode="MultiToggle"
+		                    enableSelectAll="false"
+		                    ariaLabelledBy="title">
+		                <columns>
+		                    <Column>
+		                        <m:Label text="Doc"/>
+		                        <template>
+		                            <m:Text text="{name}"/>
+		                        </template>
+		                    </Column>
+		                    <Column>
+		                        <m:Label text="Action"/>
+		                        <template>
+		                        <m:FlexBox
+									alignItems="Center"
+									justifyContent="Center">
+									<m:items>
+										<m:Button text="delete" type="Reject" class="sapUiSmallMarginEnd" />
+										<m:Button text="download" type="Accept" press="btnDownloadPressed" />
+									</m:items>
+								</m:FlexBox>
+								</template>
+		                    </Column>
+		                </columns>
+		            </TreeTable>
+        
+				</m:content>
+			</m:Page>
+	</m:App>
 
 </mvc:View>

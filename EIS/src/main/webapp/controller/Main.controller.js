@@ -8,6 +8,21 @@ sap.ui.define([
 		
 		onInit: function() {
 			console.log("onInit");
+			var oModel = new sap.ui.model.json.JSONModel();
+			var me = this;
+			$.ajax({
+				url: "ws/service/getData",
+				method: "get",
+				success: function(data, status, xhr) {
+					oModel.setData(data);
+					console.log("data: " + data + ", status: " + status);
+					me.getView().setModel(oModel);
+				},
+				error: function(xhr, status, error) {
+					console.log("Error in XHR: " + status + " | " + error);
+				}
+			});
+	        
 		},
 		
 		onBeforeRendering: function() {
@@ -40,20 +55,19 @@ sap.ui.define([
 			});*/
 		},
 		
-		btnDownloadPressed: function() {
-			sap.m.MessageToast.show("btnDownload Pressed");
-			var docId = this.getView().byId("documentId").getValue();
+		btnDownloadPressed: function(e) {
+			var src = e.getSource();
+		    
+			console.log(src);
+            var oContext = src.getBindingContext();
+            var sPath = oContext.getPath();
+            
+            console.log(oContext,sPath);
+            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+            
+            var docId = tableModel.getProperty(sPath + "/id");
+            console.log(docId);
 			window.open("ws/service/document/download/" + docId, "_parent");
-			/*$.ajax({
-				url: "ws/service/document/download/" + documentName ,
-				method: "get",
-				success: function(data, status, xhr) {
-					console.log("data: " + data + ", status: " + status);
-				},
-				error: function(xhr, status, error) {
-					console.log("Error in XHR: " + status + " | " + error);
-				}
-			});*/
 		},
 		
 		btnDeletePressed: function() {

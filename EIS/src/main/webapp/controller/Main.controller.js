@@ -132,10 +132,11 @@ sap.ui.define([
 						var folName = sap.ui.getCore().byId("rootFolderInput").getValue();
 						$.ajax({
 							url: "ws/service/folderAtRoot/" + folName,
-							method: "get",
+							method: "post",
 							success: function(data, status, xhr) {
 								console.log(data);
 								getData();
+								sap.ui.getCore().byId("rootFolderInput").destroy();
 							},
 							error: function(xhr, status, error) {
 								console.log("Error in XHR: " + status + " | " + error);
@@ -148,6 +149,7 @@ sap.ui.define([
 					text: 'Cancel',
 					press: function () {
 						dialog.close();
+						sap.ui.getCore().byId("rootFolderInput").destroy();
 					}
 				})
 			});
@@ -177,10 +179,11 @@ sap.ui.define([
 						var folName = sap.ui.getCore().byId("folderInput").getValue();
 						$.ajax({
 							url: "ws/service/folderCreate/"+folName+"/"+docId,
-							method: "get",
+							method: "post",
 							success: function(data, status, xhr) {
 								console.log(data);
 								getData();
+								sap.ui.getCore().byId("rootFolderInput").destroy();
 							},
 							error: function(xhr, status, error) {
 								console.log("Error in XHR: " + status + " | " + error);
@@ -213,7 +216,7 @@ sap.ui.define([
 			
             $.ajax({
 				url: "ws/service/delete/" + docId ,
-				method: "get",
+				method: "delete",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
 					//location.reload();

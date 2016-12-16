@@ -136,6 +136,19 @@ public class Service {
 	//CREATE FOLDER SERVICE
 	
 	@GET
+	@Path("folderAtRoot/{folName}")
+	public Response createAtRoot(@PathParam("folName") String folName){
+		
+		String folId = repo.createAtRoot(folName);
+		Document doc = new Document();
+		doc.setDocId(folId);
+		doc.setDocType("folder");
+		documentDAO.createDocument(doc);
+		return Response.ok().entity(doc).build();
+		
+	}
+	
+	@GET
 	@Path("folderCreate/{folName}/{parentId}")
 	public Response createFolder(@PathParam("folName") String folName, @PathParam("parentId") String parentId){
 		
@@ -173,9 +186,21 @@ public class Service {
 	@Path("move/{docId}/{sId}/{dId}")
 	public Response move(@PathParam("docId") String docId,@PathParam("sId") String source, @PathParam("dId") String dest){
 		repo.move(docId,source,dest);
+		documentDAO.updateDocument(docId,dest);
 		
 		return Response.ok().build();
 			
+	}
+	
+	//Delete Document
+	
+	@GET
+	@Path("delete/{docId}")
+	public Response delete(@PathParam("docId") String docId){
+		repo.delete(docId);
+		//Database Update 
+		return Response.ok().build();
+		
 	}
 	
 }

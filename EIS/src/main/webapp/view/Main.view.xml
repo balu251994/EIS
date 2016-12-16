@@ -28,7 +28,15 @@
 		                    rows="{/}"
 		                    selectionMode="MultiToggle"
 		                    enableSelectAll="false"
+		                    toggleOpenState="btnGetPressed"
 		                    ariaLabelledBy="title">
+		                   <toolbar>
+			                    <m:Toolbar>
+			                        <m:Title id="title" text="Title"/>
+			                        <m:ToolbarSpacer/>
+			                        <m:Button text="Add Folder to Root" press="addFolderRoot"/>
+			                    </m:Toolbar>
+			                </toolbar>
 		                <columns>
 		                    <Column>
 		                        <m:Label text="Doc"/>
@@ -43,10 +51,10 @@
 									alignItems="Center"
 									justifyContent="Center">
 									<m:items>
-										<m:Button id="buttonGet" text="Get"  press="btnGetPressed" class="sapUiSmallMarginEnd" />
 										<m:Button id="buttonDown" text="Download" type="Accept" press="btnDownloadPressed" class="sapUiSmallMarginEnd"/>
-										<m:Button id="buttonMove" text="Move" press="btnMovePressed" class="sapUiSmallMarginEnd"/>
-										<m:Button id="buttonUp" text="Upload" icon="sap-icon://accept" press="btnSubmitPressed" />
+										<m:Button id="buttonAdd" text="Add Folder" press="btnAddFolderPressed" class="sapUiSmallMarginEnd"/>
+										<m:Button id="buttonDelete" text="Delete" type="Reject" press="btnDeletePressed" class="sapUiSmallMarginEnd" />
+										<m:Button id="buttonUp" text="Upload"  press="btnSubmitPressed" />
 									</m:items>
 								</m:FlexBox>
 								</template>

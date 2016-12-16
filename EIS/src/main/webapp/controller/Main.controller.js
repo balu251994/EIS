@@ -3,25 +3,36 @@ sap.ui.define([
     "sap/m/MessageToast"
 ], function(Controller, MessageToast) {
 	"use strict";
+	var oModel = new sap.ui.model.json.JSONModel();
+	var me;
+	
+	function getData(){
+		$.ajax({
+			url: "ws/service/getData",
+			method: "get",
+			success: function(data, status, xhr) {
+				for(var i=0; i<data.data.length;i++){
+					if(data.data[i].type === "folder"){
+						data.data[i].data = [{"id":""}];
+					}
+				}
+				oModel.setData(data);
+				me.getView().setModel(oModel);
+			},
+			error: function(xhr, status, error) {
+				console.log("Error in XHR: " + status + " | " + error);
+			}
+		});
+	}
 	
 	return Controller.extend("com.ey.hcp.eis.controller.Main", {
 		
 		onInit: function() {
 			console.log("onInit");
-			var oModel = new sap.ui.model.json.JSONModel();
-			var me = this;
-			$.ajax({
-				url: "ws/service/getData",
-				method: "get",
-				success: function(data, status, xhr) {
-					oModel.setData(data);
-					me.getView().setModel(oModel);
-				},
-				error: function(xhr, status, error) {
-					console.log("Error in XHR: " + status + " | " + error);
-				}
-			});
-	        
+
+			me = this
+	        getData();
+	
 		},
 		
 		onBeforeRendering: function() {
@@ -31,6 +42,7 @@ sap.ui.define([
 		onAfterRendering: function() {
 			
 		},
+		
 		
 		btnSubmitPressed: function(e) {
 			
@@ -69,11 +81,9 @@ sap.ui.define([
 		btnDownloadPressed: function(e) {
 			var src = e.getSource();
 		    
-			console.log(src);
             var oContext = src.getBindingContext();
             var sPath = oContext.getPath();
             
-            console.log(oContext,sPath);
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
             var docId = tableModel.getProperty(sPath + "/id");
@@ -82,38 +92,131 @@ sap.ui.define([
 		},
 		
 		btnGetPressed : function(e) {
+			var src = e.getParameters();
+		    
+			console.log(src.expanded,src.rowContext.sPath);
+            if(src.expanded){
+				var sPath = src.rowContext.sPath;
+	            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+	            
+	            var docId = tableModel.getProperty(sPath + "/id");
+	         
+	            $.ajax({
+					url: "ws/service/getData/" + docId,
+					method: "get",
+					success: function(data, status, xhr) {
+						for(var i=0; i<data.data.length;i++){
+							if(data.data[i].type === "folder"){
+								data.data[i].data = [{"id":""}];
+							}
+						}
+						tableModel.setProperty(sPath+"/data", data.data);
+					},
+					error: function(xhr, status, error) {
+						console.log("Error in XHR: " + status + " | " + error);
+					}
+				});
+			}
+		},
+		
+		addFolderRoot: function(){
+			var dialog = new sap.m.Dialog({
+				title: 'Create Folder',
+				type: 'Message',
+				content: new sap.m.Input("rootFolderInput",{ 
+					placeholder: 'Enter Folder Name' 
+				}),
+				beginButton: new sap.m.Button({
+					text: 'Submit',
+					press: function () {
+						var folName = sap.ui.getCore().byId("rootFolderInput").getValue();
+						$.ajax({
+							url: "ws/service/folderAtRoot/" + folName,
+							method: "get",
+							success: function(data, status, xhr) {
+								console.log(data);
+								getData();
+							},
+							error: function(xhr, status, error) {
+								console.log("Error in XHR: " + status + " | " + error);
+							}
+						});
+						dialog.close();
+					}
+				}),
+				endButton: new sap.m.Button({
+					text: 'Cancel',
+					press: function () {
+						dialog.close();
+					}
+				})
+			});
+			dialog.open();
+		},
+		
+		btnAddFolderPressed: function(e){
+			
 			var src = e.getSource();
 		    
-			console.log(src);
             var oContext = src.getBindingContext();
             var sPath = oContext.getPath();
             
-            console.log(oContext,sPath);
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
             var docId = tableModel.getProperty(sPath + "/id");
-            console.log(docId);
-            $.ajax({
-				url: "ws/service/getData/" + docId,
-				method: "get",
-				success: function(data, status, xhr) {
-					tableModel.setProperty(sPath+"/data", data.data);
-					console.log(tableModel.getProperty(sPath));
-				},
-				error: function(xhr, status, error) {
-					console.log("Error in XHR: " + status + " | " + error);
-				}
+			
+            var dialog = new sap.m.Dialog({
+				title: 'Create Folder',
+				type: 'Message',
+				content: new sap.m.Input("folderInput",{ 
+					placeholder: 'Enter Folder Name' 
+				}),
+				beginButton: new sap.m.Button({
+					text: 'Submit',
+					press: function () {
+						var folName = sap.ui.getCore().byId("folderInput").getValue();
+						$.ajax({
+							url: "ws/service/folderCreate/"+folName+"/"+docId,
+							method: "get",
+							success: function(data, status, xhr) {
+								console.log(data);
+								getData();
+							},
+							error: function(xhr, status, error) {
+								console.log("Error in XHR: " + status + " | " + error);
+							}
+						});
+						dialog.close();
+					}
+				}),
+				endButton: new sap.m.Button({
+					text: 'Cancel',
+					press: function () {
+						dialog.close();
+					}
+				})
 			});
+			dialog.open();
 		},
 		
-		btnDeletePressed: function() {
-			console.log("btnDelete Pressed");
-			var documentName = this.getView().byId("documentId").getValue();
-			$.ajax({
-				url: "ws/service/document/delete/" + documentName ,
-				method: "delete",
+		
+		btnDeletePressed: function(e) {
+			
+			var src = e.getSource();
+		    
+            var oContext = src.getBindingContext();
+            var sPath = oContext.getPath();
+            
+            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+            
+            var docId = tableModel.getProperty(sPath + "/id");	
+			
+            $.ajax({
+				url: "ws/service/delete/" + docId ,
+				method: "get",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
+					//location.reload();
 				},
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);
@@ -138,9 +241,8 @@ sap.ui.define([
 		
 		/*btnMovePressed : function(e) {
 			var src = e.getSource();
-            var params = e.getParameters();
-            debugger;
-            var oContext = src.getBindingContext();
+            
+			var oContext = src.getBindingContext();
             var sPath = oContext.getPath();
             
             var tableModel = this.getView().byId("TreeTableBasic").getModel();

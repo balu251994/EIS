@@ -195,6 +195,7 @@ sap.ui.define([
 				endButton: new sap.m.Button({
 					text: 'Cancel',
 					press: function () {
+						sap.ui.getCore().byId("rootFolderInput").destroy();
 						dialog.close();
 					}
 				})
@@ -219,7 +220,7 @@ sap.ui.define([
 				method: "delete",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
-					//location.reload();
+					location.reload();
 				},
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);

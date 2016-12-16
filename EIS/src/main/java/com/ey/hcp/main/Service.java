@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -135,7 +136,7 @@ public class Service {
 	
 	//CREATE FOLDER SERVICE
 	
-	@GET
+	@POST
 	@Path("folderAtRoot/{folName}")
 	public Response createAtRoot(@PathParam("folName") String folName){
 		
@@ -148,7 +149,7 @@ public class Service {
 		
 	}
 	
-	@GET
+	@POST
 	@Path("folderCreate/{folName}/{parentId}")
 	public Response createFolder(@PathParam("folName") String folName, @PathParam("parentId") String parentId){
 		
@@ -182,7 +183,7 @@ public class Service {
 		
 	}
 	
-	@GET
+	@POST
 	@Path("move/{docId}/{sId}/{dId}")
 	public Response move(@PathParam("docId") String docId,@PathParam("sId") String source, @PathParam("dId") String dest){
 		repo.move(docId,source,dest);
@@ -194,7 +195,7 @@ public class Service {
 	
 	//Delete Document
 	
-	@GET
+	@DELETE
 	@Path("delete/{docId}")
 	public Response delete(@PathParam("docId") String docId){
 		repo.delete(docId);

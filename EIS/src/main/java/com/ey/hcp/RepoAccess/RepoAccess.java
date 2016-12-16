@@ -20,6 +20,7 @@ import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.data.PropertyId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisNameConstraintViolationException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -270,19 +271,6 @@ DocumentDAO documentDAO;
 	public String createFolder(String folName, String folId) {
 		sessionLogin();
 		
-		if(folId.equals("6dda0564d9a887d1aced0585"))
-		{
-			Folder root = openCMISSession.getRootFolder();
-			
-			Map<String, String> newfolder = new HashMap<String, String>();
-			newfolder.put(PropertyIds.OBJECT_TYPE_ID, "cmis:folder");
-			newfolder.put(PropertyIds.NAME, folName);
-			
-			Folder newfol = root.createFolder(newfolder);
-			return newfol.getId();
-		}
-		else {
-			
 			Folder fol = (Folder) openCMISSession.getObject(folId);
 			
 			Map<String, String> newfolder = new HashMap<String, String>();
@@ -292,6 +280,54 @@ DocumentDAO documentDAO;
 			Folder newfol = fol.createFolder(newfolder);
 			return newfol.getId();
 			
-		}
+	}
+
+
+
+	public Folder getZipper(String id) {
+	
+		sessionLogin();		
+		Folder fol = (Folder) openCMISSession.getObject(id);
+		return fol;
+	
+		
+	}
+
+
+
+	public void move(String docId,String source, String dest) {
+		
+		sessionLogin();
+		Document doc = (Document) openCMISSession.getObject(docId);
+		
+		
+		Folder sourceFolder = (Folder) openCMISSession.getObject(source);
+		Folder destFolder = (Folder) openCMISSession.getObject(dest);
+		
+		doc.move(sourceFolder, destFolder);		
+				
+	}
+
+
+
+	public String createAtRoot(String folName) {
+		sessionLogin();
+		Folder root = openCMISSession.getRootFolder();
+		
+		Map<String, String> newfolder = new HashMap<String, String>();
+		newfolder.put(PropertyIds.OBJECT_TYPE_ID, "cmis:folder");
+		newfolder.put(PropertyIds.NAME, folName);
+		
+		Folder newfol = root.createFolder(newfolder);
+		return newfol.getId();
+	}
+
+
+
+	public void delete(String docId) {
+		sessionLogin();
+		Document doc = (Document) openCMISSession.getObject(docId);
+		doc.delete();
+		
 	}
 }

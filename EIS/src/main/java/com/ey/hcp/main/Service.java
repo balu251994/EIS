@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -23,6 +24,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Folder;
 
 import com.ey.hcp.RepoAccess.RepoAccess;
 import com.ey.hcp.dao.DocumentDAO;
@@ -132,6 +136,19 @@ public class Service {
 	//CREATE FOLDER SERVICE
 	
 	@GET
+	@Path("folderAtRoot/{folName}")
+	public Response createAtRoot(@PathParam("folName") String folName){
+		
+		String folId = repo.createAtRoot(folName);
+		Document doc = new Document();
+		doc.setDocId(folId);
+		doc.setDocType("folder");
+		documentDAO.createDocument(doc);
+		return Response.ok().entity(doc).build();
+		
+	}
+	
+	@GET
 	@Path("folderCreate/{folName}/{parentId}")
 	public Response createFolder(@PathParam("folName") String folName, @PathParam("parentId") String parentId){
 		
@@ -143,6 +160,46 @@ public class Service {
 		doc.setParentId(parentId);
 		documentDAO.createDocument(doc);
 		return Response.ok().entity(doc).build();
+		
+	}
+	
+	@GET
+	@Path("downZip/{id}")
+	public StreamingOutput getZip(@PathParam("id") String id){
+		
+		StreamingOutput so =null;
+		Folder fol = repo.getZipper(id);
+		
+		Iterator<CmisObject> it = fol.getChildren().iterator();
+		ArrayList<CmisObject> listArray = new ArrayList<CmisObject>();
+		
+		while (it.hasNext()) {
+			CmisObject obj =it.next();	
+		}
+		
+		
+		return null;
+		
+	}
+	
+	@GET
+	@Path("move/{docId}/{sId}/{dId}")
+	public Response move(@PathParam("docId") String docId,@PathParam("sId") String source, @PathParam("dId") String dest){
+		repo.move(docId,source,dest);
+		documentDAO.updateDocument(docId,dest);
+		
+		return Response.ok().build();
+			
+	}
+	
+	//Delete Document
+	
+	@GET
+	@Path("delete/{docId}")
+	public Response delete(@PathParam("docId") String docId){
+		repo.delete(docId);
+		//Database Update 
+		return Response.ok().build();
 		
 	}
 	

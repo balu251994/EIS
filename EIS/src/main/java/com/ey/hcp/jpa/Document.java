@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Entity
 public class Document {
 	
-	@Id @GeneratedValue
+	@GeneratedValue
 	private String id;
 	
 	@Basic
@@ -22,7 +22,7 @@ public class Document {
 	@Basic
 	private Date docUploadedDate;
 	
-	@Basic
+	@Id @Basic
 	private String docId;
 	
 	@Basic 
@@ -51,7 +51,7 @@ public class Document {
 	public String getDocId() {
 		return docId;
 	}
-
+	
 	public void setDocId(String docId) {
 		this.docId = docId;
 	}

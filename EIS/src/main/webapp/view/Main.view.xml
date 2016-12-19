@@ -11,7 +11,7 @@
 	<m:App>
 			<m:SplitContainer id="SplitContDemo" initialDetail="detail" initialMaster="master">
 						<m:detailPages>
-							<m:Page id="detail" class="sapUiStdPage">
+							<m:Page id="detail" title="Pre View" class="sapUiStdPage">
 									<m:content>
 										 <m:Image
 											id ="image" >
@@ -21,7 +21,7 @@
 								</m:Page>
 						</m:detailPages>
 						<m:masterPages>
-							<m:Page id="master"  class="sapUiStdPage">
+							<m:Page id="master" title="Root View"  class="sapUiStdPage">
 								<m:content>
 										<f:SimpleForm>
 										<u:FileUploader
@@ -57,7 +57,7 @@
 						                            <m:Text text="{name}"/>
 						                        </template>
 						                    </Column>
-						                    <Column>
+						                    <Column width="20%">
 						                        <m:Label text="Action"/>
 						                        <template>
 						                        <m:OverflowToolbar id="otbFooter">

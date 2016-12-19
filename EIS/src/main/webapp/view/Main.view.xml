@@ -9,61 +9,81 @@
 	controllerName="com.ey.hcp.eis.controller.Main">
 
 	<m:App>
-			<m:Page>
-				<m:content>
-					<f:SimpleForm>
-						<u:FileUploader
-							id="fileUploader"
-							name="myFileUpload"
-							tooltip="Upload your file to the local server"
-							style="Emphasized"
-							fileType="jpg"
-							placeholder="Choose a file for Upload...">
-						</u:FileUploader>
-
-					</f:SimpleForm>
-					
-					<TreeTable
-		                    id="TreeTableBasic"
-		                    rows="{/}"
-		                    selectionMode="MultiToggle"
-		                    enableSelectAll="false"
-		                    toggleOpenState="btnGetPressed"
-		                    ariaLabelledBy="title">
-		                   <toolbar>
-			                    <m:Toolbar>
-			                        <m:Title id="title" text="Title"/>
-			                        <m:ToolbarSpacer/>
-			                        <m:Button text="Add Folder to Root" press="addFolderRoot"/>
-			                    </m:Toolbar>
-			                </toolbar>
-		                <columns>
-		                    <Column>
-		                        <m:Label text="Doc"/>
-		                        <template>
-		                            <m:Text text="{name}"/>
-		                        </template>
-		                    </Column>
-		                    <Column>
-		                        <m:Label text="Action"/>
-		                        <template>
-		                        <m:FlexBox
-									alignItems="Center"
-									justifyContent="Center">
-									<m:items>
-										<m:Button id="buttonDown" text="Download" type="Accept" press="btnDownloadPressed" class="sapUiSmallMarginEnd"/>
-										<m:Button id="buttonAdd" text="Add Folder" press="btnAddFolderPressed" class="sapUiSmallMarginEnd"/>
-										<m:Button id="buttonDelete" text="Delete" type="Reject" press="btnDeletePressed" class="sapUiSmallMarginEnd" />
-										<m:Button id="buttonUp" text="Upload"  press="btnSubmitPressed" />
-									</m:items>
-								</m:FlexBox>
-								</template>
-		                    </Column>
-		                </columns>
-		            </TreeTable>
+			<m:SplitContainer id="SplitContDemo" initialDetail="detail" initialMaster="master">
+						<m:detailPages>
+							<m:Page id="detail" class="sapUiStdPage">
+									<m:content>
+										 <m:Image
+											id ="image" >
+										</m:Image>
         
-				</m:content>
-			</m:Page>
+									</m:content>
+								</m:Page>
+						</m:detailPages>
+						<m:masterPages>
+							<m:Page id="master"  class="sapUiStdPage">
+								<m:content>
+										<f:SimpleForm>
+										<u:FileUploader
+											id="fileUploader"
+											name="myFileUpload"
+											tooltip="Upload your file to the local server"
+											style="Emphasized"
+											fileType="jpg"
+											placeholder="Choose a file for Upload...">
+										</u:FileUploader>
+				
+									</f:SimpleForm>
+									
+									<TreeTable
+						                    id="TreeTableBasic"
+						                    rows="{path:'/',parameters:{arrayNames:['data']}}"
+						                    selectionMode="Single"
+						                    enableSelectAll="false"
+						                    toggleOpenState="btnGetPressed"
+						                    rowSelectionChange="rowSelect"
+						                    ariaLabelledBy="title">
+						                   <toolbar>
+							                    <m:Toolbar>
+							                        <m:Title id="title" text="Title"/>
+							                        <m:ToolbarSpacer/>
+							                        <m:Button text="Add Folder to Root" press="addFolderRoot"/>
+							                    </m:Toolbar>
+							                </toolbar>
+						                <columns>
+						                    <Column>
+						                        <m:Label text="Doc"/>
+						                        <template>
+						                            <m:Text text="{name}"/>
+						                        </template>
+						                    </Column>
+						                    <Column>
+						                        <m:Label text="Action"/>
+						                        <template>
+						                        <m:OverflowToolbar id="otbFooter">
+													<m:OverflowToolbarButton id="buttonDown" text="Download" type="Accept" press="btnDownloadPressed" class="sapUiSmallMarginEnd" 
+																  visible="{ path:'type',formatter:'.formatterbuttonDown'}"/>
+									                <m:OverflowToolbarButton id="buttonZipDown" text="Zip down" type="Accept"  class="sapUiSmallMarginEnd" 
+																  visible="{ path:'type',formatter:'.formatterbuttonZipDown'}"/>
+									                <m:OverflowToolbarButton id="buttonAdd" text="Add Folder" press="btnAddFolderPressed" class="sapUiSmallMarginEnd"
+																  visible="{ path:'type',formatter:'.formatterbuttonAdd'}"/>
+									                <m:OverflowToolbarButton id="buttonDeleteFolder" text="Delete Folder" type="Reject" class="sapUiSmallMarginEnd"
+																  visible="{ path:'type',formatter:'.formatterbuttonDeleteFolder'}"/>
+									                <m:OverflowToolbarButton id="buttonDelete" text="Delete" type="Reject" press="btnDeletePressed" class="sapUiSmallMarginEnd"
+																  visible="{ path:'type',formatter:'.formatterbuttonDelete'}"/>
+									                <m:OverflowToolbarButton id="buttonUp" text="Upload"  press="btnSubmitPressed" 
+																  visible="{ path:'type',formatter:'.formatterbuttonUp'}"/>
+												</m:OverflowToolbar>
+						                       
+												</template>
+						                    </Column>
+						                </columns>
+		            				</TreeTable>
+								</m:content>
+							</m:Page>
+						</m:masterPages>
+		    </m:SplitContainer>
+		           
 	</m:App>
 
 </mvc:View>

@@ -94,8 +94,7 @@ sap.ui.define([
 		btnGetPressed : function(e) {
 			var src = e.getParameters();
 		    
-			console.log(src.expanded,src.rowContext.sPath);
-            if(src.expanded){
+			if(src.expanded){
 				var sPath = src.rowContext.sPath;
 	            var tableModel = this.getView().byId("TreeTableBasic").getModel();
 	            
@@ -117,6 +116,16 @@ sap.ui.define([
 					}
 				});
 			}
+		},
+		
+		rowSelect : function(e) {
+			var src = e.getParameters();
+			var sPath = src.rowContext.sPath;
+            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+            
+            var docId = tableModel.getProperty(sPath + "/id");
+            
+            this.getView().byId("image").setSrc("ws/service/document/download/" + docId);
 		},
 		
 		addFolderRoot: function(){
@@ -183,7 +192,7 @@ sap.ui.define([
 							success: function(data, status, xhr) {
 								console.log(data);
 								getData();
-								sap.ui.getCore().byId("rootFolderInput").destroy();
+								sap.ui.getCore().byId("folderInput").destroy();
 							},
 							error: function(xhr, status, error) {
 								console.log("Error in XHR: " + status + " | " + error);
@@ -195,7 +204,7 @@ sap.ui.define([
 				endButton: new sap.m.Button({
 					text: 'Cancel',
 					press: function () {
-						sap.ui.getCore().byId("rootFolderInput").destroy();
+						sap.ui.getCore().byId("folderInput").destroy();
 						dialog.close();
 					}
 				})
@@ -228,20 +237,28 @@ sap.ui.define([
 			});
 		},
 		
-		/*formatterT: function(value){
-			//debugger;
-			for(var i=0;i<value.length;i++){
-				if(value[i].type === "folder"){
-					this.getView().byId("buttonGet").getVisible(true);
-					return value[i].name ;
-				}else{
-					this.getView().byId("buttonGet").getVisible(false);
-					return value[i].name ;
-				}
-				
-			}
-			
-		}*/
+		formatterbuttonDown: function(value){
+			return value === "document";	
+		},
+		
+		formatterbuttonZipDown: function(value){
+			return value === "folder";	
+		},
+		
+		formatterbuttonUp: function(value){
+			return value === "folder";	
+		},
+		
+		formatterbuttonAdd: function(value){
+			return value === "folder";	
+		},
+		
+		formatterbuttonDeleteFolder: function(value){
+			return value === "folder";	
+		},
+		formatterbuttonDelete: function(value){
+			return value === "document";	
+		},
 		
 		/*btnMovePressed : function(e) {
 			var src = e.getSource();

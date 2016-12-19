@@ -16,11 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.Item;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.data.PropertyId;
+import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisNameConstraintViolationException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -169,6 +171,7 @@ DocumentDAO documentDAO;
 				
 			} catch (CmisNameConstraintViolationException e) {
 				System.out.println("Document alread exists");
+				return null;
 			}
 		
 		return doc;
@@ -326,8 +329,42 @@ DocumentDAO documentDAO;
 
 	public void delete(String docId) {
 		sessionLogin();
-		Document doc = (Document) openCMISSession.getObject(docId);
-		doc.delete();
+		CmisObject cmisItem = openCMISSession.getObject(docId);
+		if(cmisItem instanceof Folder)
+		{
+			Folder fol = (Folder) cmisItem;
+			fol.deleteTree(true,UnfileObject.DELETE, true);
+		}
+		else if (cmisItem instanceof Document)
+		{
+			Document doc = (Document) cmisItem;
+			doc.delete();
+		}
 		
 	}
-}
+
+
+
+	public Map<String, Integer> deleteFol(String folId) {
+		sessionLogin();
+		
+		Folder folder = (Folder) openCMISSession.getObject(folId);
+		Iterator<CmisObject> item =	folder.getChildren().iterator();
+		Map<String, Integer> count = new HashMap<String, Integer>();
+		int folCount = 0, docCount = 0;
+		while(item.hasNext())
+		{
+			CmisObject obj = item.next();
+			if(obj instanceof Folder)
+			{
+				folCount++;
+			}
+			docCount++;
+		}
+		count.put("Folders", folCount);
+		count.put("Documents", docCount);
+
+		return count;
+	}
+	
+}	

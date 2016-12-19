@@ -24,6 +24,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
@@ -73,14 +74,12 @@ public class Service {
 	public Response uploadDocument(@PathParam("parentId") String parentId,@Context HttpServletRequest req) {
 		
 		Document doc = repo.repoAcc(req, parentId);
-		/*Document document = new Document();
-		document.setDocName(name);
-		document.setDocUploadedBy(uploadedBy);
-		document.setDocUploadedDate(new Date());
-		
-		documentDAO.createDocument(document);*/
-		
+		if(doc==null)
+		{
+			return Response.status(Status.CONFLICT).build();
+		}
 		return Response.ok().entity(doc).build();
+		
 		
 	}
 	
@@ -202,6 +201,16 @@ public class Service {
 		//Database Update 
 		return Response.ok().build();
 		
+	}
+	
+	//Delete Folder
+	
+	@GET
+	@Path("deleteFol/{folId}")
+	public Map<String, Integer> deleteFol(@PathParam("folId") String folId){
+		
+		Map<String, Integer> count =	repo.deleteFol(folId);
+		return count;	
 	}
 	
 }

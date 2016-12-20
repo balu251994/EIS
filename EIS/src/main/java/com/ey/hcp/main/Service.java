@@ -209,7 +209,7 @@ public class Service {
 	@Path("deleteFol/{folId}")
 	public Map<String, Integer> deleteFol(@PathParam("folId") String folId){
 		
-		Map<String, Integer> count =	repo.deleteFol(folId);
+		Map<String, Integer> count = repo.deleteFol(folId);
 		return count;	
 	}
 	

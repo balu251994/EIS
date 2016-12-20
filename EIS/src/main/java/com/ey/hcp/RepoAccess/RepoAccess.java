@@ -43,6 +43,8 @@ public class RepoAccess {
 DocumentDAO documentDAO;
 
 	private Session openCMISSession = null;
+	private int docCount = 0;
+	private int folCount = 0;
 
 	private void sessionLogin(){
 	
@@ -349,22 +351,37 @@ DocumentDAO documentDAO;
 		sessionLogin();
 		
 		Folder folder = (Folder) openCMISSession.getObject(folId);
-		Iterator<CmisObject> item =	folder.getChildren().iterator();
 		Map<String, Integer> count = new HashMap<String, Integer>();
-		int folCount = 0, docCount = 0;
+		count = countF(folder);
+		
+		return count;
+	}
+
+
+
+	private Map<String, Integer> countF (Folder folder) {
+		
+		Iterator<CmisObject> item = folder.getChildren().iterator();
+		
 		while(item.hasNext())
 		{
 			CmisObject obj = item.next();
 			if(obj instanceof Folder)
 			{
 				folCount++;
+				countF((Folder)obj);
 			}
+			else if (obj instanceof Document){
 			docCount++;
-		}
-		count.put("Folders", folCount);
-		count.put("Documents", docCount);
-
+			}
+			
+		}		
+		Map<String, Integer> count = new HashMap<String, Integer>();
+		count.put("FolderCount: ", folCount);
+		count.put("DocCount: ", docCount);
 		return count;
+		
+		
 	}
 	
 }	

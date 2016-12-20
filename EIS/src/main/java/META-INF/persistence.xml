@@ -4,6 +4,8 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		
 		<class>com.ey.hcp.jpa.Document</class>
+		<class>com.ey.hcp.jpa.Folders</class>
+		<class>com.ey.hcp.jpa.Document2</class>
 		
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Users\balkrishna.meena\MySQLiteDB\EIS"/>

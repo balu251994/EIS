@@ -128,7 +128,24 @@ sap.ui.define([
             
             var docId = tableModel.getProperty(sPath + "/id");
             
-            this.getView().byId("image").setSrc("ws/service/document/download/" + docId);
+            var dialog = new sap.m.Dialog({
+				title: 'Preview',
+				contentWidth: "600px",
+				contentHeight: "400px",
+				draggable:true,
+				resizable: true,
+				content: new sap.m.Image({ 
+					src:  "ws/service/document/download/" + docId
+				}),
+				endButton: new sap.m.Button({
+					text: 'Close',
+					press: function () {
+						dialog.close();
+					}
+				})
+			});
+			dialog.open();
+            
 		},
 		
 		addFolderRoot: function(){

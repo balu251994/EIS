@@ -50,17 +50,17 @@
 		                        <template>
 		                        <m:OverflowToolbar id="otbFooter">
 									<m:OverflowToolbarButton id="buttonDown" text="Download" icon="sap-icon://download" type="Accept" press="btnDownloadPressed" class="sapUiSmallMarginEnd" 
-												  visible="{ path:'type',formatter:'.formatterbuttonDown'}"/>
+												  tooltip="Download"  visible="{ path:'type',formatter:'.formatterbuttonDown'}"/>
 					                <m:OverflowToolbarButton id="buttonZipDown" text="Zip down" icon="sap-icon://download" type="Accept"  class="sapUiSmallMarginEnd" 
-												  visible="{ path:'type',formatter:'.formatterbuttonZipDown'}"/>
+												  tooltip="Download as Zip" visible="{ path:'type',formatter:'.formatterbuttonZipDown'}"/>
 					                <m:OverflowToolbarButton id="buttonAdd" text="Add Folder"  icon="sap-icon://add" press="btnAddFolderPressed" class="sapUiSmallMarginEnd"
-												  visible="{ path:'type',formatter:'.formatterbuttonAdd'}"/>
+												  tooltip="Add Folder" visible="{ path:'type',formatter:'.formatterbuttonAdd'}"/>
 					                <m:OverflowToolbarButton id="buttonDeleteFolder" text="Delete Folder" icon="sap-icon://delete" type="Reject" press="btnDeleteFolderPressed" class="sapUiSmallMarginEnd"
-												  visible="{ path:'type',formatter:'.formatterbuttonDeleteFolder'}"/>
+												  tooltip="Delete Folder" visible="{ path:'type',formatter:'.formatterbuttonDeleteFolder'}"/>
 					                <m:OverflowToolbarButton id="buttonDelete" text="Delete" type="Reject" icon="sap-icon://delete" press="btnDeletePressed" class="sapUiSmallMarginEnd"
-												  visible="{ path:'type',formatter:'.formatterbuttonDelete'}"/>
+												  tooltip="Delete" visible="{ path:'type',formatter:'.formatterbuttonDelete'}"/>
 					                <m:OverflowToolbarButton id="buttonUp" text="Upload"  press="btnSubmitPressed" icon="sap-icon://upload"
-												  visible="{ path:'type',formatter:'.formatterbuttonUp'}"/>
+												  tooltip="Upload" visible="{ path:'type',formatter:'.formatterbuttonUp'}"/>
 								</m:OverflowToolbar>
 		                       
 								</template>

@@ -128,7 +128,24 @@ sap.ui.define([
             
             var docId = tableModel.getProperty(sPath + "/id");
             
-            this.getView().byId("image").setSrc("ws/service/document/download/" + docId);
+            var dialog = new sap.m.Dialog({
+				title: 'Preview',
+				contentWidth: "600px",
+				contentHeight: "400px",
+				draggable:true,
+				resizable: true,
+				content: new sap.m.Image({ 
+					src:  "ws/service/document/download/" + docId
+				}),
+				endButton: new sap.m.Button({
+					text: 'Close',
+					press: function () {
+						dialog.close();
+					}
+				})
+			});
+			dialog.open();
+            
 		},
 		
 		addFolderRoot: function(){
@@ -238,7 +255,7 @@ sap.ui.define([
 						title: 'Do you want to Delete this!',
 						type: 'Message',
 						content: new sap.m.Text({ 
-							text:"This folder has " + data.Folders + " folders and " + data.Documents + " docs"
+							text:"This folder has " + data["FolderCount: "] + " folders and " + data["DocCount: "] + " docs"
 						}),
 						beginButton: new sap.m.Button({
 							text: 'Ok',

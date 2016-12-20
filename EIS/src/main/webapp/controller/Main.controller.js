@@ -63,17 +63,18 @@ sap.ui.define([
 					name:"myFileUpload",
 					style:"Emphasized",
 					fileType:"jpg",
+					uploadUrl:"ws/service/document/upload/" + docId,
 					placeholder:"Choose a file for Upload..."
 				}),
 				beginButton: new sap.m.Button({
-					text: 'Uplaod',
+					text: 'Upload',
 					press: function () {
 						var oFileUploader = sap.ui.getCore().byId("fileUploader");
 						if(!oFileUploader.getValue()) {
 							MessageToast.show("Choose a file first");
 							return;
 						}
-						oFileUploader.setUploadUrl("ws/service/document/upload/" + docId);
+						oFileUploader.setSendXHR(true);
 						oFileUploader.upload();
 						
 						getData(); 

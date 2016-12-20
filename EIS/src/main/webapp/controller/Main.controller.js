@@ -66,6 +66,9 @@ sap.ui.define([
 			oFileUploader.setUploadUrl("ws/service/document/upload/" + docId);
 			oFileUploader.upload();
 			
+			getData(); 
+			me.getView().byId("TreeTableBasic").collapseAll();
+			
 			/*$.ajax({
 				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
 				method: "get",
@@ -145,6 +148,7 @@ sap.ui.define([
 							success: function(data, status, xhr) {
 								console.log(data);
 								getData();
+								//me.getView().byId("TreeTableBasic").collapseAll;
 								sap.ui.getCore().byId("rootFolderInput").destroy();
 							},
 							error: function(xhr, status, error) {
@@ -192,6 +196,7 @@ sap.ui.define([
 							success: function(data, status, xhr) {
 								console.log(data);
 								getData();
+								me.getView().byId("TreeTableBasic").collapseAll();
 								sap.ui.getCore().byId("folderInput").destroy();
 							},
 							error: function(xhr, status, error) {
@@ -239,6 +244,18 @@ sap.ui.define([
 							text: 'Ok',
 							press: function () {
 								//call delete 
+								$.ajax({
+									url: "ws/service/delete/" + docId ,
+									method: "delete",
+									success: function(data, status, xhr) {
+										console.log("data: " + data + ", status: " + status);
+										getData();
+										me.getView().byId("TreeTableBasic").collapseAll();
+									},
+									error: function(xhr, status, error) {
+										console.log("Error in XHR: " + status + " | " + error);
+									}
+								});
 								dialog.close();
 							}
 						}),
@@ -273,7 +290,8 @@ sap.ui.define([
 				method: "delete",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
-					
+					getData();
+					me.getView().byId("TreeTableBasic").collapseAll();
 				},
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);

@@ -67,7 +67,7 @@
 																  visible="{ path:'type',formatter:'.formatterbuttonZipDown'}"/>
 									                <m:OverflowToolbarButton id="buttonAdd" text="Add Folder" press="btnAddFolderPressed" class="sapUiSmallMarginEnd"
 																  visible="{ path:'type',formatter:'.formatterbuttonAdd'}"/>
-									                <m:OverflowToolbarButton id="buttonDeleteFolder" text="Delete Folder" type="Reject" class="sapUiSmallMarginEnd"
+									                <m:OverflowToolbarButton id="buttonDeleteFolder" text="Delete Folder" type="Reject" press="btnDeleteFolderPressed" class="sapUiSmallMarginEnd"
 																  visible="{ path:'type',formatter:'.formatterbuttonDeleteFolder'}"/>
 									                <m:OverflowToolbarButton id="buttonDelete" text="Delete" type="Reject" press="btnDeletePressed" class="sapUiSmallMarginEnd"
 																  visible="{ path:'type',formatter:'.formatterbuttonDelete'}"/>

@@ -213,6 +213,50 @@ sap.ui.define([
 		},
 		
 		
+		btnDeleteFolderPressed: function(e) {
+			
+			var src = e.getSource();
+		    
+            var oContext = src.getBindingContext();
+            var sPath = oContext.getPath();
+            
+            var tableModel = this.getView().byId("TreeTableBasic").getModel();
+            
+            var docId = tableModel.getProperty(sPath + "/id");	
+			
+            $.ajax({
+				url: "ws/service/deleteFol/" + docId ,
+				method: "get",
+				success: function(data, status, xhr) {
+					console.log("data: " + data + ", status: " + status);
+					var dialog = new sap.m.Dialog({
+						title: 'Do you want to Delete this!',
+						type: 'Message',
+						content: new sap.m.Text({ 
+							text:"This folder has " + data.Folders + " folders and " + data.Documents + " docs"
+						}),
+						beginButton: new sap.m.Button({
+							text: 'Ok',
+							press: function () {
+								//call delete 
+								dialog.close();
+							}
+						}),
+						endButton: new sap.m.Button({
+							text: 'Cancel',
+							press: function () {
+								dialog.close();
+							}
+						})
+					});
+					dialog.open();
+				},
+				error: function(xhr, status, error) {
+					console.log("Error in XHR: " + status + " | " + error);
+				}
+			});
+		},
+		
 		btnDeletePressed: function(e) {
 			
 			var src = e.getSource();
@@ -229,7 +273,7 @@ sap.ui.define([
 				method: "delete",
 				success: function(data, status, xhr) {
 					console.log("data: " + data + ", status: " + status);
-					location.reload();
+					
 				},
 				error: function(xhr, status, error) {
 					console.log("Error in XHR: " + status + " | " + error);
@@ -238,26 +282,26 @@ sap.ui.define([
 		},
 		
 		formatterbuttonDown: function(value){
-			return value === "document";	
+			return value == "document";	
 		},
 		
 		formatterbuttonZipDown: function(value){
-			return value === "folder";	
+			return value == "folder";	
 		},
 		
 		formatterbuttonUp: function(value){
-			return value === "folder";	
+			return value == "folder";	
 		},
 		
 		formatterbuttonAdd: function(value){
-			return value === "folder";	
+			return value == "folder";	
 		},
 		
 		formatterbuttonDeleteFolder: function(value){
-			return value === "folder";	
+			return value == "folder";	
 		},
 		formatterbuttonDelete: function(value){
-			return value === "document";	
+			return value == "document";	
 		},
 		
 		/*btnMovePressed : function(e) {

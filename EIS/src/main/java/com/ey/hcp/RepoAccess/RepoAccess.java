@@ -216,6 +216,10 @@ DocumentDAO documentDAO;
 			} else
 			{
 				object.put("type","document");
+				Document doc = (Document) obj;
+				String mime = doc.getContentStream().getMimeType();
+				object.put("mimeType", mime);
+				
 				
 			}
 			

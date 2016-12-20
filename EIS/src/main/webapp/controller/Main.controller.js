@@ -1,7 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/m/MessageToast"
-], function(Controller, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/ui/unified/FileUploader"
+], function(Controller, MessageToast, FileUploader) {
 	"use strict";
 	var oModel = new sap.ui.model.json.JSONModel();
 	var me;
@@ -48,37 +49,50 @@ sap.ui.define([
 			
 			var src = e.getSource();
 		    
-			console.log(src);
-            var oContext = src.getBindingContext();
+			var oContext = src.getBindingContext();
             var sPath = oContext.getPath();
-            
-            console.log(oContext,sPath);
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
             var docId = tableModel.getProperty(sPath + "/id");
-			console.log("btnSubmit Pressed");
+			console.log(docId);
 			
-			var oFileUploader = this.getView().byId("fileUploader");
-			if(!oFileUploader.getValue()) {
-				MessageToast.show("Choose a file first");
-				return;
-			}
-			oFileUploader.setUploadUrl("ws/service/document/upload/" + docId);
-			oFileUploader.upload();
+			var dialog = new sap.m.Dialog({
+				title: 'Upload',
+				content: new sap.ui.unified.FileUploader({ 
+					id:"fileUploader",
+					name:"myFileUpload",
+					style:"Emphasized",
+					fileType:"jpg",
+					placeholder:"Choose a file for Upload..."
+				}),
+				beginButton: new sap.m.Button({
+					text: 'Uplaod',
+					press: function () {
+						var oFileUploader = sap.ui.getCore().byId("fileUploader");
+						if(!oFileUploader.getValue()) {
+							MessageToast.show("Choose a file first");
+							return;
+						}
+						oFileUploader.setUploadUrl("ws/service/document/upload/" + docId);
+						oFileUploader.upload();
+						
+						getData(); 
+						me.getView().byId("TreeTableBasic").collapseAll();
+						
+						sap.ui.getCore().byId("fileUploader").destroy();
+						dialog.close();
+					}
+				}),
+				endButton: new sap.m.Button({
+					text: 'Close',
+					press: function () {
+						sap.ui.getCore().byId("fileUploader").destroy();
+						dialog.close();
+					}
+				})
+			});
+			dialog.open();
 			
-			getData(); 
-			me.getView().byId("TreeTableBasic").collapseAll();
-			
-			/*$.ajax({
-				url: "ws/service/document/upload/" + docName + "/" + docUploadedBy,
-				method: "get",
-				success: function(data, status, xhr) {
-					console.log("data: " + data + ", status: " + status);
-				},
-				error: function(xhr, status, error) {
-					console.log("Error in XHR: " + status + " | " + error);
-				}
-			});*/
 		},
 		
 		btnDownloadPressed: function(e) {
@@ -127,15 +141,26 @@ sap.ui.define([
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
             var docId = tableModel.getProperty(sPath + "/id");
+            var url = "ws/service/document/download/" + docId;
+            var img = new Image();
+            
+            var height,width;
+            img.onload = function(){
+               height = img.height+"px";
+               width = img.width+"px";
+               console.log(height,width);
+              // code here to use the dimensions
+            }
+            img.src = url;
             
             var dialog = new sap.m.Dialog({
 				title: 'Preview',
-				contentWidth: "600px",
-				contentHeight: "400px",
+				contentWidth:width,
+				contentHeight:height,
 				draggable:true,
 				resizable: true,
 				content: new sap.m.Image({ 
-					src:  "ws/service/document/download/" + docId
+					src: url
 				}),
 				endButton: new sap.m.Button({
 					text: 'Close',

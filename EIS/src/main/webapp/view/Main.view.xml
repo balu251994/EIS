@@ -11,17 +11,6 @@
 	<m:App>
 			<m:Page id="master" title="Root View"  class="sapUiStdPage">
 				<m:content>
-						<f:SimpleForm>
-						<u:FileUploader
-							id="fileUploader"
-							name="myFileUpload"
-							tooltip="Upload your file to the local server"
-							style="Emphasized"
-							fileType="jpg"
-							placeholder="Choose a file for Upload...">
-						</u:FileUploader>
-
-					</f:SimpleForm>
 					
 					<TreeTable
 		                    id="TreeTableBasic"

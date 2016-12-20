@@ -238,7 +238,7 @@ sap.ui.define([
 						title: 'Do you want to Delete this!',
 						type: 'Message',
 						content: new sap.m.Text({ 
-							text:"This folder has " + data.Folders + " folders and " + data.Documents + " docs"
+							text:"This folder has " + data["FolderCount: "] + " folders and " + data.["DocCount: "] + " docs"
 						}),
 						beginButton: new sap.m.Button({
 							text: 'Ok',

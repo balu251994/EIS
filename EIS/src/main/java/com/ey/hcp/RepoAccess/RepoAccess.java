@@ -215,11 +215,8 @@ DocumentDAO documentDAO;
 				object.put("type", "folder");
 			} else
 			{
-				object.put("type","document");
-				Document doc = (Document) obj;
-				String mime = doc.getContentStream().getMimeType();
-				object.put("mimeType", mime);
 				
+				object.put("type","document");
 				
 			}
 			
@@ -260,6 +257,9 @@ DocumentDAO documentDAO;
 			} else
 			{
 				object.put("type","document");
+				Document doc = (Document) obj;
+				String mime = doc.getContentStream().getMimeType();
+				object.put("mimeType", mime);
 				
 			}
 			

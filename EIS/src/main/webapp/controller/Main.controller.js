@@ -33,6 +33,14 @@ sap.ui.define([
 
 			me = this
 	        getData();
+			
+			sap.ui.getCore().attachValidationError(function (oEvent) {
+				oEvent.getParameter("element").setValueState(ValueState.Error);
+			});
+
+	        sap.ui.getCore().attachValidationSuccess(function (oEvent) {
+	        	oEvent.getParameter("element").setValueState(ValueState.None);
+	        });
 	
 		},
 		
@@ -58,23 +66,30 @@ sap.ui.define([
 			
 			var dialog = new sap.m.Dialog({
 				title: 'Upload',
-				content: new sap.ui.unified.FileUploader({ 
+				content:[
+				new sap.m.Input({
+					id:"fileName",
+					placeholder:"File name"
+				}),
+				new sap.ui.unified.FileUploader({ 
 					id:"fileUploader",
 					name:"myFileUpload",
 					style:"Emphasized",
-					fileType:"jpg",
-					uploadUrl:"ws/service/document/upload/" + docId,
+					fileType:"jpg,png,tif,gif",
+					//uploadUrl:"ws/service/document/upload/" + docId,
 					placeholder:"Choose a file for Upload..."
-				}),
+				})],
 				beginButton: new sap.m.Button({
 					text: 'Upload',
 					press: function () {
 						var oFileUploader = sap.ui.getCore().byId("fileUploader");
+						var fileName = sap.ui.getCore().byId("fileName");
 						if(!oFileUploader.getValue()) {
 							MessageToast.show("Choose a file first");
 							return;
 						}
 						oFileUploader.setSendXHR(true);
+						oFileUploader.setURI("ws/service/document/upload/" + docId + "/" + fileName);
 						oFileUploader.upload();
 						
 						getData(); 
@@ -112,7 +127,7 @@ sap.ui.define([
 		btnGetPressed : function(e) {
 			var src = e.getParameters();
 		    
-			if(src.expanded){
+			//if(src.expanded){
 				var sPath = src.rowContext.sPath;
 	            var tableModel = this.getView().byId("TreeTableBasic").getModel();
 	            
@@ -133,7 +148,7 @@ sap.ui.define([
 						console.log("Error in XHR: " + status + " | " + error);
 					}
 				});
-			}
+			//}
 		},
 		
 		rowSelect : function(e) {
@@ -142,35 +157,43 @@ sap.ui.define([
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
             var docId = tableModel.getProperty(sPath + "/id");
-            var url = "ws/service/document/download/" + docId;
-            var img = new Image();
+            var type = tableModel.getProperty(sPath + "/type");
             
-            var height,width;
-            img.onload = function(){
-               height = img.height+"px";
-               width = img.width+"px";
-               console.log(height,width);
-              // code here to use the dimensions
+            if(type == "document"){
+	            var url = "ws/service/document/download/" + docId;
+	            var img = new Image();
+	            
+	            var height,width;
+	            img.onload = function(){
+	               height = img.height+"px";
+	               width = img.width+"px";
+	               console.log(height,width);
+	              // code here to use the dimensions
+	            }
+	            img.src = url;
+	            
+	            var dialog = new sap.m.Dialog({
+					title: 'Preview',
+					contentWidth:width,
+					contentHeight:height,
+					draggable:true,
+					resizable: true,
+					content: new sap.m.Image({ 
+						src: url,
+						densityAware: false
+					}),
+					endButton: new sap.m.Button({
+						text: 'Close',
+						press: function () {
+							dialog.close();
+						}
+					})
+				});
+				dialog.open();
+            }else{
+            	this.getView().byId("TreeTableBasic").expand(src.rowIndex);
+            	this.btnGetPressed(e);
             }
-            img.src = url;
-            
-            var dialog = new sap.m.Dialog({
-				title: 'Preview',
-				contentWidth:width,
-				contentHeight:height,
-				draggable:true,
-				resizable: true,
-				content: new sap.m.Image({ 
-					src: url
-				}),
-				endButton: new sap.m.Button({
-					text: 'Close',
-					press: function () {
-						dialog.close();
-					}
-				})
-			});
-			dialog.open();
             
 		},
 		
@@ -179,11 +202,16 @@ sap.ui.define([
 				title: 'Create Folder',
 				type: 'Message',
 				content: new sap.m.Input("rootFolderInput",{ 
-					placeholder: 'Enter Folder Name' 
+					placeholder: "Enter Folder Name"
+					//value:"{ type : 'sap.ui.model.type.String',constraints : {search : 'A-Z' }}"
 				}),
 				beginButton: new sap.m.Button({
 					text: 'Submit',
 					press: function () {
+						
+						var validator = new Validator();
+						validator.validate(this.byId("master"));
+	
 						var folName = sap.ui.getCore().byId("rootFolderInput").getValue();
 						$.ajax({
 							url: "ws/service/folderAtRoot/" + folName,
@@ -196,6 +224,7 @@ sap.ui.define([
 							},
 							error: function(xhr, status, error) {
 								console.log("Error in XHR: " + status + " | " + error);
+								sap.ui.getCore().byId("rootFolderInput").destroy();
 							}
 						});
 						dialog.close();
@@ -244,6 +273,7 @@ sap.ui.define([
 							},
 							error: function(xhr, status, error) {
 								console.log("Error in XHR: " + status + " | " + error);
+								sap.ui.getCore().byId("folderInput").destroy();
 							}
 						});
 						dialog.close();

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.chemistry.opencmis.client.api.Document;
 
 import com.ey.hcp.dao.DocumentDAO;
+import com.ey.hcp.jpa.Document2;
+import com.ey.hcp.jpa.Folders;
 import com.sap.ecm.api.EcmService;
 import com.sap.ecm.api.RepositoryOptions;
 import com.sap.ecm.api.RepositoryOptions.Visibility;
@@ -81,11 +84,13 @@ DocumentDAO documentDAO;
 	
 	
 
-	public com.ey.hcp.jpa.Document repoAcc(HttpServletRequest req, String parentId) {
+	public Document2 repoAcc(HttpServletRequest req, String parentId, String name) {
 		
 		sessionLogin();
 		
-		com.ey.hcp.jpa.Document doc=null;
+	//	com.ey.hcp.jpa.Document doc=null;
+		
+		Document2 doc = null;
 		String docName = null;
 		String docMime = null;
 		InputStream docIs = null;
@@ -160,15 +165,20 @@ DocumentDAO documentDAO;
 			ContentStream cstream = openCMISSession.getObjectFactory().createContentStream(docName, docSize, docMime, docIs);
 			
 			try {
-				doc = new com.ey.hcp.jpa.Document();
-				
+				doc = new Document2();
+							
 				docIm = folder.createDocument(properties, cstream, VersioningState.NONE);
 				System.out.println("Document Id:" + docIm.getId());
+				
+				
 				doc.setDocId(docIm.getId());
+				doc.setDisplayName(name);
 				doc.setDocName(docIm.getName());
-				doc.setDocType("document");
+				doc.setMimeType(docMime);
+				doc.setUploadDate(new Date());
 				doc.setParentId(parentId);
-				documentDAO.createDocument(doc);
+				
+				documentDAO.createDocument2(doc);
 				System.out.println("Document Uploaded Successfully");
 				
 			} catch (CmisNameConstraintViolationException e) {

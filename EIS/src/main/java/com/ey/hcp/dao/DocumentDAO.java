@@ -6,28 +6,33 @@ import javax.persistence.EntityManager;
 import org.apache.chemistry.opencmis.client.api.Folder;
 
 import com.ey.hcp.jpa.Document;
+import com.ey.hcp.jpa.Document2;
+import com.ey.hcp.jpa.Folders;
 
 public class DocumentDAO {
 
 	@Inject
 	EntityManager em;
 	
-	public void createDocument(Document document) {
+/*	public void createDocument(Document document) {
 		em.getTransaction().begin();
 		em.persist(document);
 		em.getTransaction().commit();
 		
 		System.out.println("docId: " + document.getId());
-	}
-
-	public void updateDocument(String docId, String dest) {
-		
+	}*/
+	
+	public void createDocument2 (Document2 document)
+	{
 		em.getTransaction().begin();
-		Document doc = em.find(Document.class, dest);
-		System.out.println("After Query"+ dest);
-		doc.setParentId(dest);
+		em.persist(document);
 		em.getTransaction().commit();
-		System.out.println("Parent Id" + doc.getParentId());
 	}
-
+	
+	public void createFolder (Folders folder){
+		em.getTransaction().begin();
+		em.persist(folder);
+		em.getTransaction().commit();
+	}
+	
 }

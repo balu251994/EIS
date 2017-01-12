@@ -61,8 +61,8 @@ sap.ui.define([
             var sPath = oContext.getPath();
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
-            var docId = tableModel.getProperty(sPath + "/id");
-			console.log(docId);
+            var folId = tableModel.getProperty(sPath + "/folId");
+			console.log(folId);
 			
 			var dialog = new sap.m.Dialog({
 				title: 'Upload',
@@ -76,20 +76,19 @@ sap.ui.define([
 					name:"myFileUpload",
 					style:"Emphasized",
 					fileType:"jpg,png,tif,gif",
-					//uploadUrl:"ws/service/document/upload/" + docId,
 					placeholder:"Choose a file for Upload..."
 				})],
 				beginButton: new sap.m.Button({
 					text: 'Upload',
 					press: function () {
 						var oFileUploader = sap.ui.getCore().byId("fileUploader");
-						var fileName = sap.ui.getCore().byId("fileName");
+						var fileName = sap.ui.getCore().byId("fileName").getValue();
 						if(!oFileUploader.getValue()) {
 							MessageToast.show("Choose a file first");
 							return;
 						}
 						oFileUploader.setSendXHR(true);
-						oFileUploader.setURI("ws/service/document/upload/" + docId + "/" + fileName);
+						oFileUploader.setUploadUrl("ws/service/document/upload/" + folId + "/" + fileName);
 						oFileUploader.upload();
 						
 						getData(); 
@@ -131,7 +130,7 @@ sap.ui.define([
 				var sPath = src.rowContext.sPath;
 	            var tableModel = this.getView().byId("TreeTableBasic").getModel();
 	            
-	            var docId = tableModel.getProperty(sPath + "/id");
+	            var docId = tableModel.getProperty(sPath + "/folId");
 	         
 	            $.ajax({
 					url: "ws/service/getData/" + docId,
@@ -156,7 +155,7 @@ sap.ui.define([
 			var sPath = src.rowContext.sPath;
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
-            var docId = tableModel.getProperty(sPath + "/id");
+            var docId = tableModel.getProperty(sPath + "/folId");
             var type = tableModel.getProperty(sPath + "/type");
             
             if(type == "document"){
@@ -209,8 +208,8 @@ sap.ui.define([
 					text: 'Submit',
 					press: function () {
 						
-						var validator = new Validator();
-						validator.validate(this.byId("master"));
+						/*var validator = new Validator();
+						validator.validate(this.byId("master"));*/
 	
 						var folName = sap.ui.getCore().byId("rootFolderInput").getValue();
 						$.ajax({
@@ -250,7 +249,7 @@ sap.ui.define([
             
             var tableModel = this.getView().byId("TreeTableBasic").getModel();
             
-            var docId = tableModel.getProperty(sPath + "/id");
+            var docId = tableModel.getProperty(sPath + "/folId");
 			
             var dialog = new sap.m.Dialog({
 				title: 'Create Folder',

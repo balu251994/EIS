@@ -4,6 +4,7 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import com.ey.hcp.RepoAccess.RepoAccess;
+import com.ey.hcp.dao.DatabaseFetch;
 import com.ey.hcp.dao.DocumentDAO;
 import com.ey.hcp.dto.Test;
 
@@ -24,6 +25,7 @@ public class WSConfig extends ResourceConfig {
         	bind(DocumentDAO.class).to(DocumentDAO.class);
         	bind(Test.class).to(Test.class);
         	bind(RepoAccess.class).to(RepoAccess.class);
+        	bind(DatabaseFetch.class).to(DatabaseFetch.class);
         }
     }
 }

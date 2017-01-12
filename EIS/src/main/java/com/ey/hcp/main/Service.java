@@ -31,14 +31,20 @@ import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 
 import com.ey.hcp.RepoAccess.RepoAccess;
+import com.ey.hcp.dao.DatabaseFetch;
 import com.ey.hcp.dao.DocumentDAO;
 import com.ey.hcp.dto.Test;
 import com.ey.hcp.jpa.Document;
+import com.ey.hcp.jpa.Document2;
+import com.ey.hcp.jpa.Folders;
 
 @Path("service")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class Service {
+	
+	@Inject
+	DatabaseFetch dbFetch;
 	
 	@Inject
 	DocumentDAO documentDAO;
@@ -69,11 +75,12 @@ public class Service {
 	}
 	
 	@POST
-	@Path("document/upload/{parentId}")
+	@Path("document/upload/{parentId}/{docName}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadDocument(@PathParam("parentId") String parentId,@Context HttpServletRequest req) {
+	public Response uploadDocument(@PathParam("parentId") String parentId,@PathParam("docName") String docName,@Context HttpServletRequest req) {
 		
-		Document doc = repo.repoAcc(req, parentId);
+		System.out.println(docName);
+		Document2 doc = repo.repoAcc(req, parentId, docName);
 		if(doc==null)
 		{
 			return Response.status(Status.CONFLICT).build();
@@ -121,7 +128,8 @@ public class Service {
 	@GET
 	@Path("getData")
 	public Map<String, ArrayList> getData(){
-	return repo.getData();
+	return dbFetch.dbFetch();
+	//return repo.getData();
 		
 		
 	}
@@ -129,7 +137,8 @@ public class Service {
 	@GET
 	@Path("getData/{id}")
 	public Map<String, ArrayList> getData(@PathParam("id") String id){	
-	return repo.getData(id);
+	return dbFetch.getData(id);
+	//return repo.getData(id);
 			
 	}
 	
@@ -139,12 +148,14 @@ public class Service {
 	@Path("folderAtRoot/{folName}")
 	public Response createAtRoot(@PathParam("folName") String folName){
 		
-		String folId = repo.createAtRoot(folName);
-		Document doc = new Document();
-		doc.setDocId(folId);
-		doc.setDocType("folder");
-		documentDAO.createDocument(doc);
-		return Response.ok().entity(doc).build();
+		String folId = repo.createAtRoot(folName.toUpperCase());
+		Folders fol = new Folders();
+		fol.setFolId(folId);
+		fol.setFolName(folName.toUpperCase());
+		fol.setParentId("Root");
+		fol.setCreateDate(new Date());
+		documentDAO.createFolder(fol);
+		return Response.ok().entity(fol).build();
 		
 	}
 	
@@ -153,13 +164,13 @@ public class Service {
 	public Response createFolder(@PathParam("folName") String folName, @PathParam("parentId") String parentId){
 		
 		String folId =repo.createFolder(folName, parentId);
-		Document doc = new Document();
-		doc.setDocId(folId);
-		doc.setDocName(folName);
-		doc.setDocType("folder");
-		doc.setParentId(parentId);
-		documentDAO.createDocument(doc);
-		return Response.ok().entity(doc).build();
+		Folders fol = new Folders();
+		fol.setFolId(folId);
+		fol.setFolName(folName.toUpperCase());
+		fol.setParentId(parentId);
+		fol.setCreateDate(new Date());
+		documentDAO.createFolder(fol);
+		return Response.ok().entity(fol).build();
 		
 	}
 	
@@ -186,7 +197,7 @@ public class Service {
 	@Path("move/{docId}/{sId}/{dId}")
 	public Response move(@PathParam("docId") String docId,@PathParam("sId") String source, @PathParam("dId") String dest){
 		repo.move(docId,source,dest);
-		documentDAO.updateDocument(docId,dest);
+	//	documentDAO.updateDocument(docId,dest);
 		
 		return Response.ok().build();
 			
